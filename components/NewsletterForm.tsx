@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { trackNewsletterSubscription } from '@/lib/analytics'
 
 export default function NewsletterForm() {
   const [email, setEmail] = useState('')
@@ -17,24 +18,30 @@ export default function NewsletterForm() {
     }
 
     setStatus('loading')
+    setMessage('')
 
     try {
-      // TODO: Integrar con API real (Fase 2)
-      // const response = await fetch('/api/newsletter', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email })
-      // })
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
 
-      // Simulación temporal
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Error al suscribirse')
+      }
+
+      // Track evento en Google Analytics
+      trackNewsletterSubscription(email)
 
       setStatus('success')
       setMessage('¡Bienvenido a RADARX! Revisa tu email para confirmar tu suscripción.')
       setEmail('')
-    } catch (error) {
+    } catch (error: any) {
       setStatus('error')
-      setMessage('Hubo un error. Por favor intenta de nuevo.')
+      setMessage(error.message || 'Hubo un error. Por favor intenta de nuevo.')
     }
   }
 
