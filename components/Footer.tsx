@@ -155,7 +155,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-cian-electrico/10 pt-6 text-center">
           <p className="text-gris-metalico text-sm">
-            &copy; {currentYear} HLG Innovación Digital. Todos los derechos reservados. 
+            &copy; {currentYear} HManuel Innovación Digital. Todos los derechos reservados. 
             Impulsando el futuro de la movilidad en LATAM.
           </p>
         </div>
