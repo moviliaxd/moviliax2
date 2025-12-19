@@ -1,17 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
-import { createClient } from '@supabase/supabase-js'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
-
-// Inicializar Supabase
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
 
 export async function POST(request: NextRequest) {
   try {
+    // Verificar que las variables de entorno existan
+    if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY no está configurado')
+      return NextResponse.json(
+        { error: 'Configuración del servidor incompleta' },
+        { status: 500 }
+      )
+    }
+
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('Credenciales de Supabase no configuradas')
+      return NextResponse.json(
+        { error: 'Configuración del servidor incompleta' },
+        { status: 500 }
+      )
+    }
+
+    // Importar dinámicamente para evitar errores en build
+    const { Resend } = await import('resend')
+    const { createClient } = await import('@supabase/supabase-js')
+
+    const resend = new Resend(process.env.RESEND_API_KEY)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    )
+
     const { email } = await request.json()
 
     // Validar email
@@ -37,7 +54,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Guardar en base de datos
-    const { data: subscriber, error: dbError } = await supabase
+    const { error: dbError } = await supabase
       .from('newsletter_subscribers')
       .insert([
         {
@@ -47,8 +64,6 @@ export async function POST(request: NextRequest) {
           source: 'website',
         },
       ])
-      .select()
-      .single()
 
     if (dbError) {
       console.error('Database error:', dbError)
@@ -142,10 +157,6 @@ export async function POST(request: NextRequest) {
                 <div style="text-align: center;">
                   <a href="https://moviliax.lat" class="cta-button">Explorar MOVILIAX</a>
                 </div>
-                
-                <p style="color: #6b7280; font-size: 14px; margin-top: 30px;">
-                  Mientras tanto, te invitamos a explorar nuestro contenido más reciente y unirte a MOVILIAX Connect, nuestra red profesional con +5,000 expertos en movilidad.
-                </p>
               </div>
               
               <div class="footer">
@@ -154,9 +165,6 @@ export async function POST(request: NextRequest) {
                   <a href="https://moviliax.lat" style="color: #00E0FF; text-decoration: none;">Web</a> | 
                   <a href="https://www.linkedin.com/company/moviliax/" style="color: #00E0FF; text-decoration: none;">LinkedIn</a> | 
                   <a href="https://x.com/MoviliaxD54988" style="color: #00E0FF; text-decoration: none;">Twitter</a>
-                </p>
-                <p style="font-size: 11px; color: #9ca3af;">
-                  Si no deseas recibir más emails, puedes <a href="https://moviliax.lat/unsubscribe?email=${email}" style="color: #6b7280;">darte de baja aquí</a>
                 </p>
               </div>
             </body>
