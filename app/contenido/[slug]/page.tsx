@@ -84,7 +84,6 @@ export default async function ArticlePage({
   return (
     <div className="min-h-screen pt-24 px-4 pb-20">
       <div className="container mx-auto max-w-4xl">
-        {/* Breadcrumb */}
         <nav className="mb-8 text-sm">
           <Link href="/" className="text-[#00E0FF] hover:underline">
             Inicio
@@ -97,9 +96,7 @@ export default async function ArticlePage({
           <span className="text-[#9CA3AF]">{article.title}</span>
         </nav>
 
-        {/* Header del Artículo */}
         <article>
-          {/* Categorías */}
           {article.categories && article.categories.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
               {article.categories.map((cat, i) => (
@@ -117,17 +114,14 @@ export default async function ArticlePage({
             </div>
           )}
 
-          {/* Título */}
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
             {article.title}
           </h1>
 
-          {/* Excerpt */}
           <p className="text-xl text-[#9CA3AF] mb-8 leading-relaxed">
             {article.excerpt}
           </p>
 
-          {/* Metadata */}
           <div className="flex items-center gap-6 mb-12 pb-8 border-b border-white/10">
             <div className="flex items-center gap-3">
               {article.author?.image ? (
@@ -153,7 +147,6 @@ export default async function ArticlePage({
             </div>
           </div>
 
-          {/* Imagen Principal */}
           {article.mainImage ? (
             <div className="mb-12 rounded-xl overflow-hidden">
               <Image
@@ -170,59 +163,60 @@ export default async function ArticlePage({
             </div>
           )}
 
-          {/* Contenido del Artículo */}
-          <div className="prose prose-invert prose-lg max-w-none">
-            {article.body ? (
-              <PortableText
-                value={article.body}
-                components={{
-                  block: {
-                    h2: ({ children }) => (
-                      <h2 className="text-3xl font-bold mt-12 mb-6 text-white">
-                        {children}
-                      </h2>
-                    ),
-                    h3: ({ children }) => (
-                      <h3 className="text-2xl font-bold mt-8 mb-4 text-white">
-                        {children}
-                      </h3>
-                    ),
-                    normal: ({ children }) => (
-                      <p className="mb-6 text-[#E5E7EB] leading-relaxed text-lg">
-                        {children}
-                      </p>
-                    ),
-                  },
-                  marks: {
-                    link: ({ children, value }) => (
-                      <a
-                        href={value?.href}
-                        className="text-[#00E0FF] hover:underline"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {children}
-                      </a>
-                    ),
-                  },
-                }}
-              />
-            ) : (
-              <div className="text-center py-20">
-                <p className="text-[#9CA3AF] text-lg mb-8">
-                  Este artículo está en proceso de redacción.
-                </p>
-                <Link
-                  href="/contenido"
-                  className="inline-block px-8 py-3 bg-[#00E0FF] text-[#0A0F2C] font-bold rounded-lg hover:opacity-90 transition-opacity"
-                >
-                  ← Volver a Contenido
-                </Link>
-              </div>
-            )}
-          </div>
+<div className="prose prose-invert prose-lg max-w-none">
+  {article.body ? (
+    <PortableText
+      value={article.body}
+      components={{
+        block: {
+          h2: ({ children }) => (
+            <h2 className="text-3xl font-bold mt-12 mb-6 text-white">
+              {children}
+            </h2>
+          ),
+          h3: ({ children }) => (
+            <h3 className="text-2xl font-bold mt-8 mb-4 text-white">
+              {children}
+            </h3>
+          ),
+          normal: ({ children }) => (
+            <p className="mb-6 text-[#E5E7EB] leading-relaxed text-lg">
+              {children}
+            </p>
+          ),
+        },
+        marks: {
+          link: ({ children, value }) => {
+            const href = value?.href || '#'
+            return (
+              <a
+                href={href}
+                className="text-[#00E0FF] hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {children}
+              </a>
+            )
+          },
+        },
+      }}
+    />
+  ) : (
+    <div className="text-center py-20">
+      <p className="text-[#9CA3AF] text-lg mb-8">
+        Este artículo está en proceso de redacción.
+      </p>
+      <Link
+        href="/contenido"
+        className="inline-block px-8 py-3 bg-[#00E0FF] text-[#0A0F2C] font-bold rounded-lg hover:opacity-90 transition-opacity"
+      >
+        ← Volver a Contenido
+      </Link>
+    </div>
+  )}
+</div>
 
-          {/* Call to Action */}
           <div className="mt-16 p-8 bg-gradient-to-br from-[#00E0FF]/10 to-[#6B46FF]/10 rounded-xl border border-[#00E0FF]/20">
             <h3 className="text-2xl font-bold mb-4">
               ¿Te gustó este artículo?
@@ -238,7 +232,6 @@ export default async function ArticlePage({
             </Link>
           </div>
 
-          {/* Navegación */}
           <div className="mt-12 pt-8 border-t border-white/10">
             <Link
               href="/contenido"
