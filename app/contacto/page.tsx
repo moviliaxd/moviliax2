@@ -45,7 +45,7 @@ export default function ContactoPage() {
       icon: '📧',
       title: 'Email',
       info: 'hola@moviliax.com',
-      link: 'mailto:hola@moviliax.com'
+      link: 'mailto:moviliaxdigital@gmail.com'
     },
     {
       icon: '📱',
@@ -62,7 +62,7 @@ export default function ContactoPage() {
     {
       icon: '⏰',
       title: 'Horario',
-      info: 'Lun - Vie: 9:00 - 18:00',
+      info: 'Siempre disponible',
       link: '#'
     }
   ]
