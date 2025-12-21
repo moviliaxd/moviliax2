@@ -1,10 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
-import { supabase } from '@/lib/supabase'
 
-const resend = new Resend(process.env.RESEND_API_KEY!)
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { nombre, email, empresa, asunto, mensaje } = await req.json()
 
@@ -15,10 +16,18 @@ export async function POST(req: Request) {
       )
     }
 
+    // 🔐 Crear clientes EN RUNTIME
+    const supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+    const resend = new Resend(process.env.RESEND_API_KEY!)
+
     const score = calculateLeadScore({ email, empresa, asunto, mensaje })
     const priority = classifyPriority(score)
 
-    await saveLead({
+    await supabase.from('leads').insert({
       nombre,
       email,
       empresa,
@@ -29,7 +38,7 @@ export async function POST(req: Request) {
       status: 'new'
     })
 
-    await sendAutoReply({ email, nombre, priority })
+    await sendAutoReply({ resend, email, nombre, priority })
 
     return NextResponse.json({ success: true })
   } catch (error) {
@@ -41,7 +50,9 @@ export async function POST(req: Request) {
   }
 }
 
-/* ----------------------------- LEAD SCORING ----------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                              LEAD SCORING                                  */
+/* -------------------------------------------------------------------------- */
 
 function calculateLeadScore({
   email,
@@ -66,92 +77,49 @@ function calculateLeadScore({
     otro: 5
   }
 
-  if (asunto && asuntoScore[asunto]) {
-    score += asuntoScore[asunto]
+    if (asunto && asuntoScore[asunto]) score += asuntoScore[asunto]
+    if (isCorporateEmail(email)) score += 20
+    if (empresa && empresa.length > 0) score += 15
+  
+    return score
   }
+  
+    function isCorporateEmail(email: string): boolean {
+      const freeEmailDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com']
+      const domain = email.split('@')[1]
+      return !freeEmailDomains.includes(domain.toLowerCase())
+    }
 
-  if (isCorporateEmail(email)) score += 20
-  if (empresa && empresa.trim()) score += 10
-  if (mensaje.length > 300) score += 15
-
-  const keywords = ['proyecto', 'estrategia', 'implementación', 'latam', 'movilidad']
-  if (keywords.some(k => mensaje.toLowerCase().includes(k))) {
-    score += 10
+  function classifyPriority(score: number): string {
+    if (score >= 70) return 'high'
+    if (score >= 40) return 'medium'
+    return 'low'
   }
-
-  return score
-}
-
-function classifyPriority(score: number): 'high' | 'medium' | 'low' {
-  if (score >= 70) return 'high'
-  if (score >= 40) return 'medium'
-  return 'low'
-}
-
-/* --------------------------- AUTO RESPUESTA --------------------------- */
-
-async function sendAutoReply({
-  email,
-  nombre,
-  priority
-}: {
-  email: string
-  nombre: string
-  priority: 'high' | 'medium' | 'low'
-}) {
-  let subject = 'Gracias por contactarnos'
-  let body = ''
-
-  if (priority === 'high') {
-    subject = 'Hablemos de tu proyecto'
-    body = `
-Hola ${nombre},
-
-Gracias por tu mensaje. Estamos revisando tu consulta de forma prioritaria.
-En breve te contactaremos.
-
-Saludos,
-MoviliaX
-`
-  } else if (priority === 'medium') {
-    body = `
-Hola ${nombre},
-
-Gracias por escribirnos. Revisaremos tu mensaje y te responderemos pronto.
-
-Saludos,
-MoviliaX
-`
-  } else {
-    body = `
-Hola ${nombre},
-
-Gracias por contactarnos.
-Te invitamos a suscribirte a nuestro newsletter para recibir insights semanales.
-
-Saludos,
-MoviliaX
-`
+  
+  /* -------------------------------------------------------------------------- */
+  /*                            AUTO REPLY EMAIL                                */
+  /* -------------------------------------------------------------------------- */
+  
+  async function sendAutoReply({
+    resend,
+    email,
+    nombre,
+    priority
+  }: {
+    resend: Resend
+    email: string
+    nombre: string
+    priority: string
+  }) {
+    try {
+      await resend.emails.send({
+        from: 'contact@moviliax.com',
+        to: email,
+        subject: 'Hemos recibido tu mensaje',
+        html: `<p>Hola ${nombre},</p><p>Gracias por contactarnos. Tu mensaje ha sido recibido y será atendido pronto.</p>`
+      })
+    } catch (error) {
+      console.error('AUTO REPLY ERROR', error)
+    }
   }
-
-  await resend.emails.send({
-    from: process.env.FROM_EMAIL!,
-    to: email,
-    subject,
-    text: body
-  })
-}
-
-/* ------------------------------ UTILIDADES ------------------------------ */
-
-function isCorporateEmail(email: string) {
-  const freeDomains = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com']
-  const domain = email.split('@')[1]?.toLowerCase()
-  return domain && !freeDomains.includes(domain)
-}
-
-async function saveLead(lead: any) {
-  await supabase.from('leads').insert(lead)
-}
-
 
