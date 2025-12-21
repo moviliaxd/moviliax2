@@ -44,7 +44,7 @@ export default function ContactoPage() {
     {
       icon: '📧',
       title: 'Email',
-      info: 'hola@moviliax.com',
+      info: 'moviliaxdigital@gmail.com',
       link: 'mailto:moviliaxdigital@gmail.com'
     },
     {
