@@ -43,7 +43,7 @@ export default function GlosarioPage() {
 
   useEffect(() => {
     if (searchTerm) {
-      const filtered: typeof glossaryData = {}
+      const filtered = { A: [], B: [], C: [], D: [], E: [] } as typeof glossaryData
       Object.entries(glossaryData).forEach(([letter, terms]) => {
         const matchingTerms = terms.filter(term => 
           term.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
