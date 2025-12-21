@@ -80,7 +80,7 @@ export default function NewsletterForm() {
       )}
 
       <p className="text-gris-metalico text-sm text-center mt-4">
-        Los profesionales ya reciben RADARX cada domingo
+        Los profesionales ya reciben RADARX. ¿Y tú?
       </p>
     </div>
   )
