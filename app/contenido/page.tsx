@@ -2,6 +2,7 @@ import { client } from '@/lib/sanity'
 import Link from 'next/link'
 import { Metadata } from 'next'
 
+
 export const metadata: Metadata = {
   title: 'Contenido - MOVILIAX',
   description: 'Artículos sobre movilidad e innovación en América Latina',
