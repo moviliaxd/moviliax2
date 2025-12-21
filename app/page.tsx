@@ -3,12 +3,12 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <main id="main-content"><div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 pt-20">
         {/* Background Grid */}
         <div className="hero-grid" aria-hidden="true" />
-        
+
         {/* Particles Effect */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cian-electrico/10 rounded-full blur-3xl animate-pulse-glow" />
@@ -19,27 +19,27 @@ export default function Home() {
           <span className="inline-block px-4 py-2 bg-cian-electrico/10 border border-cian-electrico/30 rounded-full text-cian-electrico text-sm font-semibold mb-6">
             🚀 Plataforma #1 en Movilidad LATAM
           </span>
-          
+
           <h1 className="text-5xl md:text-7xl font-exo font-bold mb-6 leading-tight">
             El Futuro de la Movilidad en{' '}
             <span className="text-gradient">Movimiento</span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-gris-metalico mb-10 max-w-3xl mx-auto leading-relaxed">
-            Exploramos, analizamos y conectamos el ecosistema de movilidad en América Latina. 
+            Exploramos, analizamos y conectamos el ecosistema de movilidad en América Latina.
             Desde vehículos eléctricos hasta ciudades inteligentes.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="#newsletter" 
+            <a
+              href="#newsletter"
               className="btn-primary inline-flex items-center justify-center gap-2"
             >
               Suscríbete Gratis
               <span>✨</span>
             </a>
-            <Link 
-              href="/contenido" 
+            <Link
+              href="/contenido"
               className="btn-secondary inline-flex items-center justify-center gap-2"
             >
               Explorar Contenido
@@ -56,7 +56,7 @@ export default function Home() {
             <span className="text-cian-electrico text-sm font-semibold mb-2 block">Contenido Premium</span>
             <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">Lo Que Ofrecemos</h2>
             <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
-              Análisis profundos, reportajes exclusivos y datos que importan para entender 
+              Análisis profundos, reportajes exclusivos y datos que importan para entender
               el presente y futuro de la movilidad en nuestra región.
             </p>
           </div>
@@ -68,7 +68,7 @@ export default function Home() {
                 Reportajes Especiales
               </h3>
               <p className="text-gris-metalico">
-                Investigaciones a fondo sobre tendencias, empresas y tecnologías que están 
+                Investigaciones a fondo sobre tendencias, empresas y tecnologías que están
                 revolucionando la forma en que nos movemos.
               </p>
             </article>
@@ -79,7 +79,7 @@ export default function Home() {
                 Datos y Análisis
               </h3>
               <p className="text-gris-metalico">
-                Números, gráficas y estudios que revelan las verdaderas tendencias del mercado 
+                Números, gráficas y estudios que revelan las verdaderas tendencias del mercado
                 de movilidad latinoamericano.
               </p>
             </article>
@@ -90,7 +90,7 @@ export default function Home() {
                 Entrevistas Exclusivas
               </h3>
               <p className="text-gris-metalico">
-                Conversaciones con líderes, emprendedores y visionarios que están construyendo 
+                Conversaciones con líderes, emprendedores y visionarios que están construyendo
                 el futuro de la movilidad.
               </p>
             </article>
@@ -101,7 +101,7 @@ export default function Home() {
                 Video Reportajes
               </h3>
               <p className="text-gris-metalico">
-                Contenido audiovisual de calidad que lleva las historias más relevantes 
+                Contenido audiovisual de calidad que lleva las historias más relevantes
                 directamente a tu pantalla.
               </p>
             </article>
@@ -112,7 +112,7 @@ export default function Home() {
                 Recursos Educativos
               </h3>
               <p className="text-gris-metalico">
-                Guías, glosarios y material didáctico para entender a fondo el ecosistema 
+                Guías, glosarios y material didáctico para entender a fondo el ecosistema
                 de movilidad y logística.
               </p>
             </article>
@@ -123,7 +123,7 @@ export default function Home() {
                 Cobertura Regional
               </h3>
               <p className="text-gris-metalico">
-                Desde México hasta Argentina, monitoreamos lo que sucede en cada país 
+                Desde México hasta Argentina, monitoreamos lo que sucede en cada país
                 de Latinoamérica.
               </p>
             </article>
@@ -175,8 +175,8 @@ export default function Home() {
               <strong className="text-white">El Boom de los EVs en México</strong><br />
               Con Ana Torres, directora de Tesla LATAM. 45 minutos de insights sobre el mercado eléctrico.
             </p>
-            <Link 
-              href="/podcast" 
+            <Link
+              href="/podcast"
               className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
             >
               Escuchar ahora <span>→</span>
@@ -203,8 +203,8 @@ export default function Home() {
               <p className="text-gris-metalico mb-4">
                 Red profesional exclusiva de +5,000 expertos en movilidad, startups y tomadores de decisión.
               </p>
-              <Link 
-                href="/connect" 
+              <Link
+                href="/connect"
                 className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
               >
                 Unirse ahora <span>→</span>
@@ -217,8 +217,8 @@ export default function Home() {
               <p className="text-gris-metalico mb-4">
                 Comparte tu expertise. Buscamos autores, investigadores y expertos del sector.
               </p>
-              <Link 
-                href="/colaboradores" 
+              <Link
+                href="/colaboradores"
                 className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
               >
                 Ser colaborador <span>→</span>
@@ -235,21 +235,21 @@ export default function Home() {
             <span className="inline-block px-4 py-2 bg-cian-electrico/20 rounded-full text-cian-electrico text-sm font-semibold mb-4">
               ⚡ Gratuito & Semanal
             </span>
-            
+
             <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">
               RADAR<span className="text-cian-electrico">X</span>
             </h2>
-            
+
             <p className="text-gris-metalico text-lg mb-8 max-w-2xl mx-auto">
-              Tu dosis semanal de innovación en movilidad. Tendencias, análisis exclusivos, 
+              Tu dosis semanal de innovación en movilidad. Tendencias, análisis exclusivos,
               datos y lo que está transformando el movimiento en América Latina.
             </p>
-            
+
             <NewsletterForm />
           </div>
         </div>
       </section>
-    </div>
+    </div></main>
   )
 }
 
