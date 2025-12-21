@@ -36,7 +36,7 @@ async function getArticle(slug: string): Promise<Article | null> {
         body
       }`,
       { slug },
-      { next: { revalidate: 60 } }
+      { cache: 'no-store' }
     )
     return article
   } catch (error) {
@@ -48,9 +48,10 @@ async function getArticle(slug: string): Promise<Article | null> {
 export async function generateMetadata({ 
   params 
 }: { 
-  params: { slug: string } 
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
-  const article = await getArticle(params.slug)
+  const { slug } = await params
+  const article = await getArticle(slug)
   
   if (!article) {
     return {
@@ -67,14 +68,13 @@ export async function generateMetadata({
 export default async function ArticlePage({ 
   params 
 }: { 
-  params: { slug: string } 
+  params: Promise<{ slug: string }>
 }) {
-  const article = await getArticle(params.slug)
-
+  const { slug } = await params
+  const article = await getArticle(slug)
   if (!article) {
     notFound()
-  }
-
+  }   
   const publishedDate = new Date(article.publishedAt).toLocaleDateString('es-MX', {
     year: 'numeric',
     month: 'long',
