@@ -46,7 +46,6 @@ async function getArticles(): Promise<Article[]> {
     return []
   }
 }
-
 export default async function ContenidoPage() {
   const articles = await getArticles()
 
@@ -65,7 +64,6 @@ export default async function ContenidoPage() {
             Análisis profundos sobre el futuro de la movilidad en América Latina.
           </p>
         </div>
-
         {/* Filtros */}
         <div className="flex flex-wrap gap-4 mb-12 justify-center">
           <button className="px-6 py-2 bg-[#00E0FF] text-[#0A0F2C] rounded-full font-semibold">
@@ -81,7 +79,6 @@ export default async function ContenidoPage() {
             Startups
           </button>
         </div>
-
         {/* Grid de Artículos */}
         {articles.length === 0 ? (
           <div className="text-center py-20">
@@ -102,58 +99,57 @@ export default async function ContenidoPage() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {articles.map((article) => (
-              <article
+              <Link 
+                href={`/contenido/${article.slug.current}`} 
                 key={article._id}
-                className="bg-gradient-to-br from-[#0A0F2C] to-[#0D0D0D] rounded-xl overflow-hidden border border-[#00E0FF]/20 hover:border-[#00E0FF]/50 transition-all group"
+                className="block"
               >
-                {/* Placeholder Image */}
-                <div className="aspect-video bg-gradient-to-br from-[#00E0FF]/20 to-[#6B46FF]/20 relative overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center text-4xl">
-                    📰
-                  </div>
-                  {article.featured && (
-                    <div className="absolute top-4 right-4 bg-[#00E0FF] text-[#0A0F2C] px-3 py-1 rounded-full text-xs font-bold">
-                      Destacado
+                <article className="bg-gradient-to-br from-[#0A0F2C] to-[#0D0D0D] rounded-xl overflow-hidden border border-[#00E0FF]/20 hover:border-[#00E0FF]/50 transition-all group cursor-pointer h-full">
+                  {/* Placeholder Image */}
+                  <div className="aspect-video bg-gradient-to-br from-[#00E0FF]/20 to-[#6B46FF]/20 relative overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center text-4xl">
+                      📰
                     </div>
-                  )}
-                </div>
-
-                <div className="p-6">
-                  {/* Categorías */}
-                  {article.categories && article.categories.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {article.categories.map((cat, i) => (
-                        <span
-                          key={i}
-                          className="text-xs px-3 py-1 rounded-full font-semibold"
-                          style={{
-                            backgroundColor: cat.color + '20',
-                            color: cat.color,
-                          }}
-                        >
-                          {cat.title}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Título */}
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-[#00E0FF] transition-colors">
-                    {article.title}
-                  </h3>
-
-                  {/* Excerpt */}
-                  <p className="text-[#9CA3AF] text-sm mb-4 line-clamp-3">
-                    {article.excerpt}
-                  </p>
-
-                  {/* Metadata */}
-                  <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
-                    <span>{article.author?.name || 'MOVILIAX'}</span>
-                    <span>{article.readTime || 5} min lectura</span>
+                    {article.featured && (
+                      <div className="absolute top-4 right-4 bg-[#00E0FF] text-[#0A0F2C] px-3 py-1 rounded-full text-xs font-bold">
+                        Destacado
+                      </div>
+                    )}
                   </div>
-                </div>
-              </article>
+                  <div className="p-6">
+                    {/* Categorías */}
+                    {article.categories && article.categories.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        {article.categories.map((cat, i) => (
+                          <span
+                            key={i}
+                            className="text-xs px-3 py-1 rounded-full font-semibold"
+                            style={{
+                              backgroundColor: cat.color + '20',
+                              color: cat.color,
+                            }}
+                          >
+                            {cat.title}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {/* Título */}
+                    <h3 className="text-xl font-bold mb-2 group-hover:text-[#00E0FF] transition-colors">
+                      {article.title}
+                    </h3>
+                    {/* Excerpt */}
+                    <p className="text-[#9CA3AF] text-sm mb-4 line-clamp-3">
+                      {article.excerpt}
+                    </p>
+                    {/* Metadata */}
+                    <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
+                      <span>{article.author?.name || 'MOVILIAX'}</span>
+                      <span>{article.readTime || 5} min lectura</span>
+                    </div>
+                  </div>
+                </article>
+              </Link>
             ))}
           </div>
         )}
