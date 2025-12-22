@@ -1,7 +1,14 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+
+// Inicializar Supabase
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function POST(request: Request) {
   try {
@@ -34,6 +41,12 @@ export async function POST(request: Request) {
       );
     }
 
+    // Obtener IP y User Agent
+    const ip = request.headers.get('x-forwarded-for') || 
+               request.headers.get('x-real-ip') || 
+               'unknown';
+    const userAgent = request.headers.get('user-agent') || 'unknown';
+
     const asuntosMap: Record<string, string> = {
       general: 'Consulta General',
       partnership: 'Alianzas y Partnerships',
@@ -45,6 +58,31 @@ export async function POST(request: Request) {
     };
 
     const asuntoTexto = asuntosMap[asunto] || 'Consulta General';
+
+    // 🗄️ GUARDAR EN SUPABASE (antes de enviar emails)
+    const { data: contactData, error: dbError } = await supabase
+      .from('contact_forms')
+      .insert([
+        {
+          nombre,
+          email,
+          empresa: empresa || null,
+          asunto: asunto || 'general',
+          mensaje,
+          ip_address: ip,
+          user_agent: userAgent,
+          status: 'pending',
+        },
+      ])
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error('❌ Error al guardar en BD:', dbError);
+      // No fallar completamente, continuar con el envío de emails
+    } else {
+      console.log('✅ Contacto guardado en BD:', contactData?.id);
+    }
 
     // 1. Email de notificación para ti
     const resultNotificacion = await resend.emails.send({
@@ -65,6 +103,7 @@ export async function POST(request: Request) {
               .label { font-weight: bold; color: #0891b2; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; }
               .value { color: #1e293b; font-size: 16px; }
               .message-box { background: white; padding: 20px; border-radius: 8px; border: 2px solid #e2e8f0; white-space: pre-wrap; line-height: 1.8; }
+              .db-id { background: #fef3c7; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 11px; margin-top: 20px; color: #92400e; }
             </style>
           </head>
           <body>
@@ -95,6 +134,11 @@ export async function POST(request: Request) {
                 <div class="label">💬 Mensaje</div>
                 <div class="message-box">${mensaje}</div>
               </div>
+              ${contactData ? `
+              <div class="db-id">
+                🗄️ ID en BD: ${contactData.id}
+              </div>
+              ` : ''}
               <p style="text-align: center; color: #64748b; font-size: 12px; margin-top: 30px;">
                 Enviado el ${new Date().toLocaleString('es-MX', { dateStyle: 'full', timeStyle: 'short', timeZone: 'America/Mexico_City' })}
               </p>
@@ -150,8 +194,9 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { 
         success: true, 
-        message: 'Emails enviados correctamente',
+        message: 'Contacto guardado y emails enviados correctamente',
         ids: {
+          database: contactData?.id,
           notificacion: resultNotificacion.data?.id,
           confirmacion: resultConfirmacion.data?.id
         }
@@ -163,7 +208,7 @@ export async function POST(request: Request) {
     console.error('Error detallado:', error);
     return NextResponse.json(
       { 
-        error: 'Error al enviar el email',
+        error: 'Error al procesar el formulario',
         details: error.message 
       },
       { status: 500 }
