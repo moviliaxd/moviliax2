@@ -113,7 +113,7 @@ function calculateLeadScore({
   }) {
     try {
       await resend.emails.send({
-        from: 'contact@moviliax.com',
+        from: '@moviliax.lat',
         to: email,
         subject: 'Hemos recibido tu mensaje',
         html: `<p>Hola ${nombre},</p><p>Gracias por contactarnos. Tu mensaje ha sido recibido y será atendido pronto.</p>`
