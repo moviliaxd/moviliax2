@@ -1,51 +1,61 @@
-import { Resend } from 'resend';
-import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { Resend } from 'resend'
+import { NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Inicializar Supabase
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { nombre, email, empresa, asunto, mensaje } = body;
+    // ✅ Validar env vars PRIMERO
+    if (!process.env.RESEND_API_KEY) {
+      console.error('[SEND_CONTACT] RESEND_API_KEY no está configurada')
+      return NextResponse.json(
+        { error: 'Error de configuración del servidor' },
+        { status: 500 }
+      )
+    }
+
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('[SEND_CONTACT] Supabase credentials faltantes')
+      return NextResponse.json(
+        { error: 'Error de configuración del servidor' },
+        { status: 500 }
+      )
+    }
+
+    // 🔐 Instanciar EN RUNTIME (no en scope global)
+    const resend = new Resend(process.env.RESEND_API_KEY)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+    const body = await request.json()
+    const { nombre, email, empresa, asunto, mensaje } = body
 
     // Validación mejorada
     if (!nombre || !email || !mensaje) {
       return NextResponse.json(
         { error: 'Faltan campos requeridos' },
         { status: 400 }
-      );
+      )
     }
 
     // Validar email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { error: 'Email inválido' },
         { status: 400 }
-      );
-    }
-
-    // Validar API Key
-    if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY no está configurada');
-      return NextResponse.json(
-        { error: 'Error de configuración del servidor' },
-        { status: 500 }
-      );
+      )
     }
 
     // Obtener IP y User Agent
     const ip = request.headers.get('x-forwarded-for') || 
                request.headers.get('x-real-ip') || 
-               'unknown';
-    const userAgent = request.headers.get('user-agent') || 'unknown';
+               'unknown'
+    const userAgent = request.headers.get('user-agent') || 'unknown'
 
     const asuntosMap: Record<string, string> = {
       general: 'Consulta General',
