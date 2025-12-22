@@ -22,6 +22,24 @@ export const event = ({ action, category, label, value }: {
   }
 }
 
+// Función genérica para rastrear eventos personalizados
+export const trackEvent = (eventName: string, eventData?: Record<string, any>) => {
+  // Parsear el nombre del evento si contiene formato "action - label" o "action_label"
+  const parts = eventName.split(' - ').length > 1 
+    ? eventName.split(' - ') 
+    : eventName.split('_')
+  
+  const action = parts[0] || eventName
+  const label = parts.length > 1 ? parts.slice(1).join(' - ') : undefined
+  
+  event({
+    action: action.toLowerCase(),
+    category: eventData?.category || 'engagement',
+    label: label || eventData?.label,
+    value: eventData?.value,
+  })
+}
+
 // Eventos específicos para MOVILIAX
 
 // Newsletter subscription

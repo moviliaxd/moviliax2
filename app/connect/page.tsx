@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Battery, Building2, Truck, Bot, Briefcase, Globe, MessageSquare, Users, Calendar, MapPin, Clock, X, Search, Filter } from 'lucide-react'
-import { trackCTAClick, trackEvent } from '@/lib/analytics'
+import { trackEvent } from '@/lib/analytics'
 
 // Datos
 const STATS = [
@@ -140,43 +140,27 @@ export default function ConnectPage() {
 
   const handleRegister = () => {
     setShowRegisterModal(true)
-    trackCTAClick('Connect - Open Register Modal')
+    trackEvent('Connect - Open Register Modal')
   }
 
   const handleJoinForum = (forumTitle: string) => {
-    trackEvent({
-      action: 'join_forum',
-      category: 'engagement',
-      label: forumTitle
-    })
+    trackEvent(`join_forum - ${forumTitle}`)
     alert(`¡Te has unido al foro "${forumTitle}"! En producción esto abriría el foro.`)
   }
 
   const handleJoinGroup = (groupName: string) => {
-    trackEvent({
-      action: 'join_group',
-      category: 'engagement',
-      label: groupName
-    })
+    trackEvent(`join_group - ${groupName}`)
     alert(`¡Solicitud enviada para unirte a "${groupName}"!`)
   }
 
   const handleRegisterEvent = (eventTitle: string) => {
     if (registeredEvents.includes(eventTitle)) {
       setRegisteredEvents(registeredEvents.filter(e => e !== eventTitle))
-      trackEvent({
-        action: 'unregister_event',
-        category: 'engagement',
-        label: eventTitle
-      })
+      trackEvent(`unregister_event - ${eventTitle}`)
       alert(`Te has dado de baja de "${eventTitle}"`)
     } else {
       setRegisteredEvents([...registeredEvents, eventTitle])
-      trackEvent({
-        action: 'register_event',
-        category: 'engagement',
-        label: eventTitle
-      })
+      trackEvent(`register_event - ${eventTitle}`)
       alert(`¡Registrado en "${eventTitle}"! Te enviaremos confirmación por email.`)
     }
   }
@@ -231,7 +215,7 @@ export default function ConnectPage() {
             <a 
               href="#como-funciona" 
               className="btn-secondary inline-flex items-center justify-center gap-2"
-              onClick={() => trackCTAClick('Connect - Ver Como Funciona')}
+              onClick={() => trackEvent('Connect - Ver Como Funciona')}
             >
               Ver Cómo Funciona
             </a>
