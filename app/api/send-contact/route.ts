@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 
     // 1. Email de notificación para ti
     const resultNotificacion = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'moviliax.lat',
       to: ['moviliaxdigital@gmail.com'],
       subject: `[Contacto] ${asuntoTexto} - ${nombre}`,
       replyTo: email,
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
 
     // 2. Email de confirmación al usuario
     const resultConfirmacion = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'moviliax.lat',
       to: [email],
       subject: '✅ Hemos recibido tu mensaje - Moviliax',
       html: `
