@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://moviliax.com/sitemap.xml
+Sitemap: https://moviliax.lat/sitemap.xml

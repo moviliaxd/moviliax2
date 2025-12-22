@@ -5,10 +5,6 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'moviliax.com',
-      },
-      {
-        protocol: 'https',
         hostname: 'moviliax.lat',
       },
       {
