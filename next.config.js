@@ -7,6 +7,19 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'moviliax.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'moviliax.lat',
+      },
+      {
+        protocol: 'https',
+        hostname: 'moviliax.online',
+      },
+      {
+        // Sanity CDN
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
     ],
   },
 }

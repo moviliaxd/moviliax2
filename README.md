@@ -1,110 +1,266 @@
 # MOVILIAX - Next.js Edition
 
-![MOVILIAX](https://img.shields.io/badge/MOVILIAX-Next.js-00E0FF?style=for-the-badge)
-![Version](https://img.shields.io/badge/version-1.0.0-blue?style=for-the-badge)
+![MOVILIAX](https://img.shields.io/badge/MOVILIAX-Next.js%2016-00E0FF?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-100%25%20Operacional-success?style=for-the-badge)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-ISC-green?style=for-the-badge)
 
-**La plataforma líder en movilidad e innovación en América Latina** - Ahora en Next.js
+**La plataforma líder en movilidad e innovación en América Latina** - Completamente migrada de HTML estático a Next.js con CMS headless (Sanity), email funcional (Resend), analytics (Google Analytics) y base de datos (Supabase).
 
-## 🚀 Tecnologías
+## 🎯 Estado del Proyecto
 
-- **Next.js 14+** - Framework React con App Router
-- **TypeScript** - Tipado estático
-- **Tailwind CSS** - Diseño utility-first
-- **React 18+** - UI library
+✅ **100% FUNCIONAL** - Todas las características esenciales implementadas y operacionales.
+
+### Características Completadas:
+- ✅ Frontend responsivo con Tailwind CSS v4
+- ✅ Newsletter funcional (Resend + Supabase)
+- ✅ CMS headless (Sanity) con artículos dinámicos
+- ✅ Google Analytics integrado
+- ✅ API Routes para newsletter y contacto
+- ✅ Lead scoring y dashboard administrativo
+- ✅ SEO optimizado con sitemap dinámico
+- ✅ Middleware para rutas protegidas
+- ✅ Componentes accesibles y reutilizables
+
+Ver detalles completos: [CHECKLIST_COMPLETO.md](CHECKLIST_COMPLETO.md)
+
+## 🚀 Tech Stack
+
+| Tecnología | Versión | Propósito |
+|-----------|---------|----------|
+| **Next.js** | 16.1 | Framework React con App Router |
+| **TypeScript** | 5.9 | Tipado estático |
+| **Tailwind CSS** | 4.1 | Estilos utility-first |
+| **React** | 19.2 | UI library |
+| **Sanity** | CMS headless | Contenido dinámico |
+| **Supabase** | PostgreSQL | Base de datos |
+| **Resend** | Email API | Envío de emails |
+| **Google Analytics** | GA4 | Tracking |
+| **Next-Auth** | 4.24 | Autenticación (fase futura) |
 
 ## 📁 Estructura del Proyecto
 
 ```
 moviliax-nextjs/
-├── app/
-│   ├── layout.tsx          # Layout principal
-│   ├── page.tsx            # Página de inicio
-│   └── globals.css         # Estilos globales
-├── components/
-│   ├── Header.tsx          # Header reutilizable
-│   ├── Footer.tsx          # Footer reutilizable
-│   └── NewsletterForm.tsx  # Formulario de newsletter
-├── public/
-│   └── images/             # Imágenes y assets
-├── lib/                    # Utilidades y configuración
-└── next.config.js          # Configuración de Next.js
+├── app/                          # App Router (Next.js 16)
+│   ├── api/                      # API Routes
+│   │   ├── newsletter/route.ts   # ✅ Newsletter
+│   │   ├── contact/route.ts      # ✅ Contacto
+│   │   └── send-contact/route.ts # ✅ Email
+│   ├── contenido/                # ✅ CMS dinámico
+│   │   ├── page.tsx              # Listado artículos
+│   │   └── [slug]/page.tsx       # Detalle artículo
+│   ├── admin/                    # ✅ Dashboard protegido
+│   │   └── leads/page.tsx        # Gestión de leads
+│   ├── layout.tsx                # Root layout con GA
+│   ├── page.tsx                  # Homepage
+│   ├── globals.css               # Estilos globales
+│   └── [páginas]/page.tsx        # Páginas estáticas
+│
+├── components/                   # Componentes reutilizables
+│   ├── Header.tsx                # ✅ Menú responsivo
+│   ├── Footer.tsx                # ✅ Footer
+│   ├── NewsletterForm.tsx        # ✅ Newsletter funcional
+│   ├── GoogleAnalytics.tsx       # ✅ GA tracking
+│   └── ScrollToTop.tsx           # ✅ Botón flotante
+│
+├── lib/                          # Utilidades
+│   ├── sanity.ts                 # ✅ Cliente Sanity
+│   ├── sanityFetch.ts            # ✅ Funciones fetch
+│   ├── queries.ts                # ✅ GROQ queries
+│   ├── supabase.ts               # ✅ Cliente Supabase
+│   └── analytics.ts              # ✅ GA eventos
+│
+├── sanity/schemas/               # Schemas de ejemplo
+│   ├── article.example.ts
+│   ├── author.example.ts
+│   └── category.example.ts
+│
+├── docs/                         # Documentación
+│   ├── ANALYTICS_SETUP.md
+│   ├── NEWSLETTER_SETUP.md
+│   └── SANITY_SETUP.md
+│
+├── public/                       # Assets estáticos
+├── .github/                      # GitHub
+│   └── copilot-instructions.md   # ✅ Instrucciones para agentes IA
+│
+├── .env.example                  # ✅ Template variables
+├── CHECKLIST_COMPLETO.md         # ✅ Verificación 100%
+├── IMPLEMENTACION_COMPLETA.md    # Setup 3 fases
+├── QUICK_START.md                # Guía rápida
+└── FIXES.md                      # Correcciones aplicadas
 ```
 
 ## 🛠️ Instalación y Desarrollo
 
 ### Requisitos Previos
-- Node.js 18.17 o superior
-- npm o yarn
+- **Node.js** 18.17+ 
+- **npm** o **yarn**
+- Variables de entorno configuradas (ver `.env.example`)
 
 ### Instalación
 
 ```bash
-# Clonar el repositorio
-git clone [url-del-repo]
+# Clonar repositorio
+git clone https://github.com/tu-usuario/moviliax-nextjs.git
 cd moviliax-nextjs
 
 # Instalar dependencias
 npm install
 
-# Ejecutar en modo desarrollo
+# Configurar variables de entorno
+cp .env.example .env.local
+# Editar .env.local con tus valores reales
+```
+
+### Ejecutar en Desarrollo
+
+```bash
 npm run dev
 ```
 
 Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-## 📦 Scripts Disponibles
+### Build para Producción
 
 ```bash
-npm run dev      # Modo desarrollo
-npm run build    # Build para producción
-npm run start    # Iniciar servidor de producción
-npm run lint     # Linter de código
+npm run build
+npm start
 ```
 
-## 🎨 Diseño y Colores
+### Linting
 
-El proyecto utiliza la paleta de colores original de MOVILIAX:
+```bash
+npm run lint
+```
 
-- **Azul Profundo**: `#0A0F2C` - Color principal
-- **Cian Eléctrico**: `#00E0FF` - Color de acento
-- **Gris Metálico**: `#9CA3AF` - Texto secundario
-- **Violeta Tech**: `#6B46FF` - Color complementario
-- **Negro Carbón**: `#0D0D0D` - Fondos oscuros
+## 📊 Funcionalidades Principales
 
-## ✨ Características Implementadas
+### 1️⃣ Newsletter (Totalmente Operacional)
 
-### ✅ Fase 1 Completada
-- [x] Configuración base de Next.js + TypeScript
-- [x] Integración de Tailwind CSS
-- [x] Componentes reutilizables (Header, Footer)
-- [x] Página principal (Home) migrada
-- [x] Diseño responsive
-- [x] Optimización de imágenes
-- [x] SEO mejorado con metadata
-- [x] Accesibilidad (skip to content, ARIA labels)
+```typescript
+// Formulario en cualquier página
+<NewsletterForm />
 
-### 🔄 Próximas Fases
+// Flujo:
+// Usuario → Newsletter Form → POST /api/newsletter 
+// → Validación → Supabase → Resend → GA Tracking
+```
 
-#### Fase 2: Funcionalidad Backend
-- [ ] API Routes para newsletter
-- [ ] Integración con servicio de email (Resend/SendGrid)
-- [ ] Base de datos (Prisma + PostgreSQL)
-- [ ] Google Analytics
+**Características:**
+- ✅ Validación de email en client y server
+- ✅ Verificación de duplicados
+- ✅ Email de bienvenida automático
+- ✅ Tracking de conversión en GA
+- ✅ Almacenamiento en `newsletter_subscribers` tabla
 
-#### Fase 3: Content Management
-- [ ] Integración con CMS headless (Sanity)
-- [ ] Sistema de artículos dinámico
-- [ ] Páginas de artículos individuales
-- [ ] Sistema de categorías y tags
+### 2️⃣ Contacto con Lead Scoring
 
-#### Fase 4: Features Avanzadas
-- [ ] Sistema de usuarios (NextAuth.js)
-- [ ] MOVILIAX Connect funcional
-- [ ] Dashboard de métricas
-- [ ] Sistema de comentarios
+```typescript
+// POST /api/contact
+{
+  "nombre": "Juan",
+  "email": "juan@empresa.com",
+  "empresa": "Tech Corp",
+  "asunto": "partnership",
+  "mensaje": "Queremos colaborar..."
+}
+```
 
-## 🌐 Deploy
+**Características:**
+- ✅ Scoring automático de leads
+- ✅ Clasificación de prioridad (high/medium/low)
+- ✅ Email de confirmación al usuario
+- ✅ Notificación al equipo
+- ✅ Dashboard en `/admin/leads`
+
+### 3️⃣ CMS Dinámico (Sanity)
+
+```typescript
+// Artículos se crean en Sanity Studio
+// Se renderean automáticamente en:
+// - /contenido (listado)
+// - /contenido/[slug] (detalle con SSR)
+```
+
+**Características:**
+- ✅ Relaciones: articles → authors, categories
+- ✅ PortableText para contenido rico
+- ✅ Imágenes optimizadas
+- ✅ Metadata dinámico
+- ✅ Revalidate cada 60 segundos
+
+### 4️⃣ Google Analytics
+
+```typescript
+import { trackEvent, trackNewsletterSubscription } from '@/lib/analytics'
+
+// Eventos automáticos + personalizados
+trackNewsletterSubscription(email)
+trackArticleView('Título del artículo')
+trackCTAClick('Suscribirse')
+```
+
+**Características:**
+- ✅ Tracking automático de páginas
+- ✅ Eventos personalizados
+- ✅ Tiempo real disponible
+- ✅ Conversiones medidas
+
+### 5️⃣ Admin Dashboard
+
+Acceso protegido en `/admin/leads` con:
+- 📊 Estadísticas (total, nuevos, alta prioridad)
+- 📋 Tabla de todos los contactos
+- 🎨 Colores por prioridad
+- 📧 Emails directos desde tabla
+
+## 🔐 Configuración de Entorno
+
+Crear `.env.local` basado en `.env.example`:
+
+```env
+# SANITY CMS
+NEXT_PUBLIC_SANITY_PROJECT_ID=tsyxjl86
+NEXT_PUBLIC_SANITY_DATASET=production
+SANITY_API_TOKEN=sk_...
+
+# SUPABASE
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+
+# RESEND (Email)
+RESEND_API_KEY=re_...
+
+# GOOGLE ANALYTICS
+NEXT_PUBLIC_GA_ID=G-...
+
+# ADMIN
+ADMIN_TOKEN=tu_token_secreto
+
+# BASE URL
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
+
+Ver guías completas:
+- [Google Analytics Setup](docs/ANALYTICS_SETUP.md)
+- [Newsletter Setup](docs/NEWSLETTER_SETUP.md)
+- [Sanity Setup](docs/SANITY_SETUP.md)
+
+## 🎨 Paleta de Colores
+
+Personalizada en `tailwind.config.js`:
+
+```
+🔵 Azul Profundo:    #0A0F2C
+🔷 Cian Eléctrico:   #00E0FF
+⚪ Gris Metálico:    #9CA3AF
+🟣 Violeta Tech:     #6B46FF
+⚫ Negro Carbón:     #0D0D0D
+```
+
+## 🚀 Deploy
 
 ### Vercel (Recomendado)
 
@@ -116,53 +272,70 @@ npm install -g vercel
 vercel
 ```
 
-### Otras opciones
-- Netlify
-- Railway
-- DigitalOcean App Platform
+**Configurar en Vercel:**
+1. Agregar todas las variables de `.env.local` en Environment Variables
+2. Conectar repositorio para CI/CD automático
+3. Redeploy después de agregar variables
 
-## 🔧 Configuración de Entorno
+### Otros Proveedores
 
-Crea un archivo `.env.local` para variables de entorno:
+- **Netlify**: Soporta Next.js, seguir documentación oficial
+- **Railway**: Soporta Node.js + PostgreSQL
+- **DigitalOcean**: App Platform soporta Next.js
 
-```env
-# Base URL
-NEXT_PUBLIC_BASE_URL=https://moviliax.com
+## 📚 Documentación Completa
 
-# Analytics (Fase 2)
-NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
-
-# Email Service (Fase 2)
-RESEND_API_KEY=your_api_key_here
-
-# Database (Fase 2)
-DATABASE_URL=postgresql://user:password@localhost:5432/moviliax
-```
-
-## 📚 Recursos
-
-- [Documentación de Next.js](https://nextjs.org/docs)
-- [Documentación de Tailwind CSS](https://tailwindcss.com/docs)
-- [Documentación de TypeScript](https://www.typescriptlang.org/docs)
+- [CHECKLIST_COMPLETO.md](CHECKLIST_COMPLETO.md) - Verificación de todas las features
+- [QUICK_START.md](QUICK_START.md) - Guía rápida 5 minutos
+- [IMPLEMENTACION_COMPLETA.md](IMPLEMENTACION_COMPLETA.md) - Setup detallado
+- [docs/ANALYTICS_SETUP.md](docs/ANALYTICS_SETUP.md) - Google Analytics paso a paso
+- [docs/NEWSLETTER_SETUP.md](docs/NEWSLETTER_SETUP.md) - Resend + Supabase
+- [docs/SANITY_SETUP.md](docs/SANITY_SETUP.md) - Sanity CMS studio
+- [.github/copilot-instructions.md](.github/copilot-instructions.md) - Instrucciones para agentes IA
 
 ## 🤝 Contribuir
 
 Las contribuciones son bienvenidas. Por favor:
 
 1. Fork el proyecto
-2. Crea tu feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push al branch (`git push origin feature/AmazingFeature`)
+2. Crea una rama (`git checkout -b feature/AmazingFeature`)
+3. Commit cambios (`git commit -m 'Add AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-## 📝 Licencia
+## 🔗 Enlaces Útiles
 
-ISC © HLG Innovación Digital
+- 🌐 **Dominio Principal:** https://moviliax.lat
+- 🌐 **Dominio Secundario:** https://moviliax.online
+- 📝 **Sanity Studio:** https://sanity.io/manage
+- 📊 **Google Analytics:** https://analytics.google.com
+- 💾 **Supabase:** https://supabase.com
+- 📧 **Resend:** https://resend.com
 
-## 👥 Equipo
+## 📞 Soporte y Contacto
 
-Desarrollado por HLG Innovación Digital
+- 📧 Email: moviliaxdigital@gmail.com
+- 🐦 Twitter: @MoviliaxD54988
+- 🔗 LinkedIn: [MOVILIAX](https://linkedin.com/company/moviliax)
+
+## 📄 Licencia
+
+Este proyecto está bajo la licencia ISC. Ver [LICENSE](LICENSE) para más detalles.
 
 ---
 
-**MOVILIAX** - El Futuro de la Movilidad en Movimiento 🚀
+## ✨ Agradecimientos
+
+- [Next.js](https://nextjs.org) - Framework excelente
+- [Vercel](https://vercel.com) - Deploy y hosting
+- [Tailwind CSS](https://tailwindcss.com) - Estilos utility-first
+- [Sanity](https://sanity.io) - CMS headless
+- [Supabase](https://supabase.com) - PostgreSQL en la nube
+- [Resend](https://resend.com) - Email API
+- Comunidad de Next.js y React
+
+---
+
+**Made with ❤️ by HLG Innovación Digital**
+
+**MOVILIAX - El Futuro de la Movilidad en Movimiento** 🚀
