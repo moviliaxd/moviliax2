@@ -221,7 +221,7 @@ export default function Footer() {
           </div>
           
           <div>
-            <p>© 2025 Moviliax. Todos los derechos reservados.</p>
+            <p>© 2025 HManuel Innovación Digital. Moviliax. Todos los derechos reservados.</p>
           </div>
         </div>
       </div>
