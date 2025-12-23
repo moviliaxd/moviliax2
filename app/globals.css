@@ -3,7 +3,7 @@
 
 @import "tailwindcss";
 
-@theme {
+:root {
   /* Colores personalizados */
   --color-azul-profundo: #0A0F2C;
   --color-cian-electrico: #00E0FF;
