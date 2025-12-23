@@ -27,7 +27,6 @@ export default function Home() {
 
           <p className="text-xl md:text-2xl text-gris-metalico mb-10 max-w-3xl mx-auto leading-relaxed">
             Exploramos, analizamos y conectamos el ecosistema de movilidad en América Latina.
-            Desde vehículos eléctricos hasta ciudades inteligentes.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -56,7 +55,7 @@ export default function Home() {
             <span className="text-cian-electrico text-sm font-semibold mb-2 block">Contenido Premium</span>
             <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">Lo Que Ofrecemos</h2>
             <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
-              Análisis profundos, reportajes exclusivos y datos que importan para entender
+              Análisis, reportajes y datos que importan para entender
               el presente y futuro de la movilidad en nuestra región.
             </p>
           </div>
@@ -68,7 +67,7 @@ export default function Home() {
                 Reportajes Especiales
               </h3>
               <p className="text-gris-metalico">
-                Investigaciones a fondo sobre tendencias, empresas y tecnologías que están
+                Investigaciones sobre tendencias, empresas y tecnologías que están
                 revolucionando la forma en que nos movemos.
               </p>
             </article>
@@ -79,7 +78,7 @@ export default function Home() {
                 Datos y Análisis
               </h3>
               <p className="text-gris-metalico">
-                Números, gráficas y estudios que revelan las verdaderas tendencias del mercado
+                Números, gráficas y estudios que revelan las tendencias del mercado
                 de movilidad latinoamericano.
               </p>
             </article>
@@ -101,7 +100,7 @@ export default function Home() {
                 Video Reportajes
               </h3>
               <p className="text-gris-metalico">
-                Contenido audiovisual de calidad que lleva las historias más relevantes
+                Contenido audiovisual que lleva las historias más relevantes
                 directamente a tu pantalla.
               </p>
             </article>
@@ -114,17 +113,6 @@ export default function Home() {
               <p className="text-gris-metalico">
                 Guías, glosarios y material didáctico para entender a fondo el ecosistema
                 de movilidad y logística.
-              </p>
-            </article>
-
-            <article className="content-card group">
-              <span className="text-4xl mb-4 block">🌍</span>
-              <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
-                Cobertura Regional
-              </h3>
-              <p className="text-gris-metalico">
-                Desde México hasta Argentina, monitoreamos lo que sucede en cada país
-                de Latinoamérica.
               </p>
             </article>
           </div>
@@ -167,21 +155,6 @@ export default function Home() {
               Conversaciones profundas con los visionarios que están construyendo el futuro de la movilidad.
             </p>
           </div>
-
-          <div className="content-card max-w-2xl mx-auto">
-            <span className="text-4xl mb-4 block">🎧</span>
-            <h3 className="text-2xl font-bold mb-3">Episodio #1</h3>
-            <p className="text-gris-metalico mb-4">
-              <strong className="text-white">El Boom de los EVs en México</strong><br />
-              Con Ana Torres, directora de Tesla LATAM. 45 minutos de insights sobre el mercado eléctrico.
-            </p>
-            <Link
-              href="/podcast"
-              className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
-            >
-              Escuchar ahora <span>→</span>
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -201,7 +174,7 @@ export default function Home() {
               <span className="text-4xl mb-4 block">🤝</span>
               <h3 className="text-2xl font-bold mb-3">MOVILIAX Connect</h3>
               <p className="text-gris-metalico mb-4">
-                Red profesional exclusiva de +5,000 expertos en movilidad, startups y tomadores de decisión.
+                Red profesional de +5,000 expertos en movilidad, startups y tomadores de decisión.
               </p>
               <Link
                 href="/connect"
@@ -233,7 +206,7 @@ export default function Home() {
         <div className="container mx-auto max-w-4xl">
           <div className="bg-gradient-to-br from-cian-electrico/10 to-violeta-tech/10 border border-cian-electrico/30 rounded-2xl p-8 md:p-12 text-center">
             <span className="inline-block px-4 py-2 bg-cian-electrico/20 rounded-full text-cian-electrico text-sm font-semibold mb-4">
-              ⚡ Gratuito & Semanal
+              ⚡ Gratuito & Mensual
             </span>
 
             <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">
@@ -241,7 +214,7 @@ export default function Home() {
             </h2>
 
             <p className="text-gris-metalico text-lg mb-8 max-w-2xl mx-auto">
-              Tu dosis semanal de innovación en movilidad. Tendencias, análisis exclusivos,
+              Tu dosis mensualde innovación en movilidad. Tendencias, análisis,
               datos y lo que está transformando el movimiento en América Latina.
             </p>
 

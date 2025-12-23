@@ -12,12 +12,12 @@ export const metadata: Metadata = {
   authors: [{ name: 'HLG Innovación Digital' }],
   openGraph: {
     type: 'website',
-    url: 'https://moviliax.com/',
+    url: 'https://moviliax.lat/',
     title: 'MOVILIAX - El Futuro de la Movilidad en Movimiento',
     description: 'Exploramos, analizamos y conectamos el ecosistema de movilidad en América Latina.',
     siteName: 'MOVILIAX',
     images: [{
-      url: 'https://moviliax.com/images/og-image.jpg',
+      url: 'https://moviliax.lat/images/og-image.jpg',
       width: 1200,
       height: 630,
     }],
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     site: '@MoviliaxD54988',
     title: 'MOVILIAX - El Futuro de la Movilidad en Movimiento',
     description: 'Exploramos, analizamos y conectamos el ecosistema de movilidad en América Latina.',
-    images: ['https://moviliax.com/images/twitter-image.jpg'],
+    images: ['https://moviliax.lat/images/twitter-image.jpg'],
   },
   robots: {
     index: true,

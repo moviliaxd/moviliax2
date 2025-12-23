@@ -71,7 +71,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link href="/contenido" className="text-gris-metalico hover:text-cian-electrico transition-colors text-sm">
-                  Reportajes Especiales
+                  Reportajes
                 </Link>
               </li>
               <li>
@@ -129,16 +129,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/acerca#team" className="text-gris-metalico hover:text-cian-electrico transition-colors text-sm">
-                  Equipo
-                </Link>
-              </li>
-              <li>
-                <Link href="/contacto" className="text-gris-metalico hover:text-cian-electrico transition-colors text-sm">
-                  Contacto
-                </Link>
-              </li>
-              <li>
                 <Link href="/privacidad" className="text-gris-metalico hover:text-cian-electrico transition-colors text-sm">
                   Privacidad
                 </Link>
@@ -155,7 +145,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-cian-electrico/10 pt-6 text-center">
           <p className="text-gris-metalico text-sm">
-            &copy; {currentYear} HLG Innovación Digital. Todos los derechos reservados. 
+            &copy; {currentYear} HManuel Innovación Digital. Todos los derechos reservados. 
             Impulsando el futuro de la movilidad en LATAM.
           </p>
         </div>

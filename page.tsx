@@ -58,7 +58,7 @@ export default function Home() {
             <span className="text-cian-electrico text-sm font-semibold mb-2 block">Contenido Premium</span>
             <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">Lo Que Ofrecemos</h2>
             <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
-              Análisis profundos, reportajes exclusivos y datos que importan para entender 
+              Análisis, reportajes exclusivos y datos que importan para entender 
               el presente y futuro de la movilidad en nuestra región.
             </p>
           </div>
@@ -70,7 +70,7 @@ export default function Home() {
                 Reportajes Especiales
               </h3>
               <p className="text-gris-metalico">
-                Investigaciones a fondo sobre tendencias, empresas y tecnologías que están 
+                Investigaciones sobre tendencias, empresas y tecnologías que están 
                 revolucionando la forma en que nos movemos.
               </p>
             </article>
@@ -103,7 +103,7 @@ export default function Home() {
                 Video Reportajes
               </h3>
               <p className="text-gris-metalico">
-                Contenido audiovisual de calidad que lleva las historias más relevantes 
+                Contenido audiovisual que lleva las historias más relevantes 
                 directamente a tu pantalla.
               </p>
             </article>
@@ -125,8 +125,7 @@ export default function Home() {
                 Cobertura Regional
               </h3>
               <p className="text-gris-metalico">
-                Desde México hasta Argentina, monitoreamos lo que sucede en cada país 
-                de Latinoamérica.
+                Noticias desde México
               </p>
             </article>
           </div>
@@ -166,24 +165,10 @@ export default function Home() {
               MOVILIA<span className="text-cian-electrico">X</span> TALKS
             </h2>
             <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
-              Conversaciones profundas con los visionarios que están construyendo el futuro de la movilidad.
+              Conversaciones con los visionarios que están construyendo el futuro de la movilidad.
             </p>
           </div>
 
-          <div className="content-card max-w-2xl mx-auto">
-            <span className="text-4xl mb-4 block">🎧</span>
-            <h3 className="text-2xl font-bold mb-3">Episodio #1</h3>
-            <p className="text-gris-metalico mb-4">
-              <strong className="text-white">El Boom de los EVs en México</strong><br />
-              Con Ana Torres, directora de Tesla LATAM. 45 minutos de insights sobre el mercado eléctrico.
-            </p>
-            <Link 
-              href="/podcast" 
-              className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
-            >
-              Escuchar ahora <span>→</span>
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -235,7 +220,7 @@ export default function Home() {
         <div className="container mx-auto max-w-4xl">
           <div className="bg-gradient-to-br from-cian-electrico/10 to-violeta-tech/10 border border-cian-electrico/30 rounded-2xl p-8 md:p-12 text-center">
             <span className="inline-block px-4 py-2 bg-cian-electrico/20 rounded-full text-cian-electrico text-sm font-semibold mb-4">
-              ⚡ Gratuito & Semanal
+              ⚡ Gratuito & Mensual
             </span>
             
             <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">
@@ -243,7 +228,7 @@ export default function Home() {
             </h2>
             
             <p className="text-gris-metalico text-lg mb-8 max-w-2xl mx-auto">
-              Tu dosis semanal de innovación en movilidad. Tendencias, análisis exclusivos, 
+              Tu dosis mensual de innovación en movilidad. Tendencias, análisis exclusivos, 
               datos y lo que está transformando el movimiento en América Latina.
             </p>
             
