@@ -7,7 +7,7 @@ export const metadata = {
     'Exploramos, analizamos y conectamos el ecosistema de movilidad en América Latina. Tendencias, análisis y recursos.',
 }
 
-export default function Home(): JSX.Element {
+export default function Home() {
   return (
     <main id="main-content">
       <div className="min-h-screen">
