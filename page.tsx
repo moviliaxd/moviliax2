@@ -29,7 +29,7 @@ export default function Home() {
           
           <p className="text-xl md:text-2xl text-gris-metalico mb-10 max-w-3xl mx-auto leading-relaxed">
             Exploramos, analizamos y conectamos el ecosistema de movilidad en América Latina. 
-            Desde vehículos eléctricos hasta ciudades inteligentes.
+          
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -58,7 +58,7 @@ export default function Home() {
             <span className="text-cian-electrico text-sm font-semibold mb-2 block">Contenido Premium</span>
             <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">Lo Que Ofrecemos</h2>
             <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
-              Análisis, reportajes exclusivos y datos que importan para entender 
+              Análisis, reportajes y datos que importan para entender 
               el presente y futuro de la movilidad en nuestra región.
             </p>
           </div>
@@ -81,7 +81,7 @@ export default function Home() {
                 Datos y Análisis
               </h3>
               <p className="text-gris-metalico">
-                Números, gráficas y estudios que revelan las verdaderas tendencias del mercado 
+                Números, gráficas y estudios que revelan las tendencias del mercado 
                 de movilidad latinoamericano.
               </p>
             </article>
@@ -125,7 +125,7 @@ export default function Home() {
                 Cobertura Regional
               </h3>
               <p className="text-gris-metalico">
-                Noticias desde México
+                Noticias desde México para América Latina
               </p>
             </article>
           </div>
@@ -179,7 +179,7 @@ export default function Home() {
             <span className="text-cian-electrico text-sm font-semibold mb-2 block">Comunidad</span>
             <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">Únete al Movimiento</h2>
             <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
-              Forma parte de la red profesional más activa de movilidad en América Latina.
+              Forma parte de la red más activa de movilidad en América Latina.
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export default function Home() {
               <span className="text-4xl mb-4 block">🤝</span>
               <h3 className="text-2xl font-bold mb-3">MOVILIAX Connect</h3>
               <p className="text-gris-metalico mb-4">
-                Red profesional exclusiva de +5,000 expertos en movilidad, startups y tomadores de decisión.
+                Red profesional de +5,000 expertos en movilidad, startups y tomadores de decisión.
               </p>
               <Link 
                 href="/connect" 

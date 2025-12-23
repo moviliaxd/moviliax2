@@ -240,12 +240,9 @@ npm run lint            # ESLint + TypeScript check
 
 ## 📚 Documentación Complementaria
 
-- [CHECKLIST_COMPLETO.md](../CHECKLIST_COMPLETO.md) - Verificación de 100% de funcionalidades ✅
-- [IMPLEMENTACION_COMPLETA.md](../IMPLEMENTACION_COMPLETA.md) - Setup detallado de 3 fases
 - [docs/ANALYTICS_SETUP.md](../docs/ANALYTICS_SETUP.md) - Google Analytics
 - [docs/NEWSLETTER_SETUP.md](../docs/NEWSLETTER_SETUP.md) - Resend + Supabase
 - [docs/SANITY_SETUP.md](../docs/SANITY_SETUP.md) - Sanity Studio
-- [FIXES.md](../FIXES.md) - Correcciones aplicadas
 
 ---
 

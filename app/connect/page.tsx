@@ -75,35 +75,6 @@ const GROUPS = [
   { name: 'Sostenibilidad Corporativa', members: '512', tag: 'ESG', badge: 'Público' }
 ]
 
-const EVENTS = [
-  {
-    date: '15 de Enero, 2026',
-    title: 'MOVILIAX Summit 2026',
-    description: 'Conferencia virtual de día completo con keynotes, paneles y networking. Más de 20 speakers internacionales.',
-    type: 'Virtual',
-    time: '9:00 AM - 6:00 PM (MX)',
-    attendees: '1,234 registrados',
-    available: true
-  },
-  {
-    date: '20 de Enero, 2026',
-    title: 'Coffee Talk: Nearshoring y Logística',
-    description: 'Conversación informal sobre el impacto del nearshoring en la infraestructura logística mexicana.',
-    type: 'Virtual',
-    time: '9:00 AM (MX)',
-    attendees: '456 registrados',
-    available: true
-  },
-  {
-    date: '28 de Enero, 2026',
-    title: 'Meetup CDMX: EVs y Infraestructura',
-    description: 'Evento presencial en Ciudad de México. Networking, panel y visita a estación de carga Tesla.',
-    type: 'Presencial - CDMX',
-    time: '6:00 PM - 9:00 PM',
-    attendees: '78/100 cupos',
-    available: true
-  }
-]
 
 export default function ConnectPage() {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
@@ -378,72 +349,6 @@ export default function ConnectPage() {
           </div>
         </div>
       </section>
-
-      {/* Eventos Section */}
-      <section id="eventos" className="py-20 px-4">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-16 observe-me">
-            <span className="inline-flex items-center gap-2 text-cian-electrico text-sm font-semibold mb-2">
-              <Calendar className="w-4 h-4" />
-              Eventos
-            </span>
-            <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">
-              Próximos Eventos
-            </h2>
-            <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
-              Webinars, meetups, conferencias y workshops.
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {EVENTS.map((event, i) => (
-              <article 
-                key={i} 
-                className="content-card hover:border-cian-electrico/50 transition-all observe-me"
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="md:w-1/4">
-                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-cian-electrico/10 text-cian-electrico rounded-lg text-sm font-semibold">
-                      <Calendar className="w-4 h-4" />
-                      {event.date}
-                    </span>
-                  </div>
-                  <div className="md:w-3/4">
-                    <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                    <p className="text-gris-metalico mb-4">{event.description}</p>
-                    <div className="flex flex-wrap gap-4 text-sm text-gris-metalico mb-4">
-                      <span className="inline-flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        {event.type}
-                      </span>
-                      <span className="inline-flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {event.time}
-                      </span>
-                      <span className="inline-flex items-center gap-1">
-                        <Users className="w-4 h-4" />
-                        {event.attendees}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => handleRegisterEvent(event.title)}
-                      className={`px-6 py-2 rounded-lg font-semibold transition-all ${
-                        registeredEvents.includes(event.title)
-                          ? 'bg-green-500/20 border border-green-500 text-green-400'
-                          : 'bg-cian-electrico/10 border border-cian-electrico/30 text-cian-electrico hover:bg-cian-electrico hover:text-azul-profundo'
-                      }`}
-                    >
-                      {registeredEvents.includes(event.title) ? '✓ Registrado' : 'Registrarme'}
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Final */}
       <section id="como-funciona" className="py-20 px-4">
         <div className="container mx-auto max-w-4xl">
