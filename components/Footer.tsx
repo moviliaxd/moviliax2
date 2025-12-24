@@ -120,18 +120,10 @@ export default function Footer() {
               </li>
               <li>
                 <Link 
-                  href="/publicidad" 
-                  className="text-gris-metalico hover:text-cian-electrico transition-colors"
-                >
-                  Publicidad
-                </Link>
-              </li>
-              <li>
-                <Link 
                   href="/media-kit" 
                   className="text-gris-metalico hover:text-cian-electrico transition-colors"
                 >
-                  Media Kit
+                  Publicidad-Media Kit
                 </Link>
               </li>
             </ul>
@@ -146,7 +138,7 @@ export default function Footer() {
                   href="/calendario" 
                   className="text-gris-metalico hover:text-cian-electrico transition-colors"
                 >
-                  Calendario 2025
+                  Calendario 2026 (Proximamente)
                 </Link>
               </li>
               <li>
@@ -154,7 +146,7 @@ export default function Footer() {
                   href="/ferias-congresos" 
                   className="text-gris-metalico hover:text-cian-electrico transition-colors"
                 >
-                  Ferias y Congresos
+                  Ferias y Congresos (Proximamente)
                 </Link>
               </li>
               <li>
@@ -162,17 +154,10 @@ export default function Footer() {
                   href="/webinars" 
                   className="text-gris-metalico hover:text-cian-electrico transition-colors"
                 >
-                  Webinars
+                 Webinars (Proximamente)
                 </Link>
               </li>
-              <li>
-                <Link 
-                  href="/eventos-pasados" 
-                  className="text-gris-metalico hover:text-cian-electrico transition-colors"
-                >
-                  Eventos Pasados
-                </Link>
-              </li>
+              
             </ul>
           </div>
         </div>
