@@ -1,376 +1,473 @@
-'use client'
-
-import { useState } from 'react'
-import Link from 'next/link'
+import Link from 'next/link';
+import { useState } from 'react';
+import { ArrowLeft, Mail, MapPin, Phone, Send, MessageSquare, Briefcase, Users, FileText, Calendar, Linkedin, Twitter, Instagram, Youtube, CheckCircle } from 'lucide-react';
 
 export default function ContactoPage() {
   const [formData, setFormData] = useState({
     nombre: '',
     email: '',
     empresa: '',
-    asunto: 'general',
+    pais: '',
+    asunto: '',
     mensaje: ''
-  })
-  
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  });
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async () => {
-    if (!formData.nombre || !formData.email || !formData.mensaje) {
-      alert('Por favor completa todos los campos requeridos')
-      return
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Aquí iría la lógica de envío del formulario
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 5000);
+  };
 
-    setIsSubmitting(true)
-    
-    // Simulación de envío
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    alert('¡Mensaje enviado exitosamente! Te contactaremos pronto.')
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
-      nombre: '',
-      email: '',
-      empresa: '',
-      asunto: 'general',
-      mensaje: ''
-    })
-    setIsSubmitting(false)
-  }
-
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-  }
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   const contactInfo = [
     {
-      icon: '📧',
-      title: 'Email',
-      info: 'hola@moviliax.com',
-      link: 'mailto:hola@moviliax.com'
+      icon: Mail,
+      title: "Email General",
+      value: "hola@moviliax.lat",
+      description: "Para consultas generales y información",
+      link: "mailto:hola@moviliax.lat"
     },
     {
-      icon: '📱',
-      title: 'Redes Sociales',
-      info: '@moviliax',
-      link: '#'
+      icon: Briefcase,
+      title: "Partnerships",
+      value: "partnerships@moviliax.lat",
+      description: "Patrocinios y colaboraciones estratégicas",
+      link: "mailto:partnerships@moviliax.lat"
     },
     {
-      icon: '📍',
-      title: 'Ubicación',
-      info: 'Ciudad de México, LATAM',
-      link: '#'
+      icon: FileText,
+      title: "Redacción",
+      value: "editorial@moviliax.lat",
+      description: "Propuestas de contenido y colaboraciones",
+      link: "mailto:editorial@moviliax.lat"
     },
     {
-      icon: '⏰',
-      title: 'Horario',
-      info: 'Lun - Vie: 9:00 - 18:00',
-      link: '#'
+      icon: Users,
+      title: "Prensa",
+      value: "prensa@moviliax.lat",
+      description: "Solicitudes de medios y comunicados",
+      link: "mailto:prensa@moviliax.lat"
     }
-  ]
+  ];
 
-  const reasons = [
+  const subjects = [
+    "Consulta General",
+    "Partnership / Patrocinio",
+    "Propuesta de Contenido",
+    "Prensa / Media",
+    "Eventos y Webinars",
+    "Newsletter RadarX",
+    "Reporte de Error Técnico",
+    "Otro"
+  ];
+
+  const offices = [
     {
-      icon: '🤝',
-      title: 'Alianzas y Partnerships',
-      description: 'Explora oportunidades de colaboración estratégica'
+      country: "🇲🇽 México",
+      city: "Ciudad de México",
+      address: "Insurgentes Sur 1602, Crédito Constructor",
+      timezone: "GMT-6",
+      isHQ: true
     },
     {
-      icon: '📰',
-      title: 'Prensa y Medios',
-      description: 'Solicitudes de prensa y entrevistas'
+      country: "🇨🇴 Colombia",
+      city: "Bogotá",
+      address: "Calle 93 #13-24, Chicó Reservado",
+      timezone: "GMT-5",
+      isHQ: false
     },
     {
-      icon: '✍️',
-      title: 'Colabora con Nosotros',
-      description: 'Escribe artículos o participa en nuestro podcast'
-    },
-    {
-      icon: '💼',
-      title: 'Publicidad y Sponsors',
-      description: 'Oportunidades de patrocinio y publicidad'
-    },
-    {
-      icon: '🎓',
-      title: 'Consultoría',
-      description: 'Servicios de consultoría en movilidad'
-    },
-    {
-      icon: '💡',
-      title: 'Otros Temas',
-      description: 'Cualquier otra consulta o sugerencia'
+      country: "🇨🇱 Chile",
+      city: "Santiago",
+      address: "Av. Apoquindo 4800, Las Condes",
+      timezone: "GMT-3",
+      isHQ: false
     }
-  ]
+  ];
+
+  const socialMedia = [
+    {
+      icon: Linkedin,
+      name: "LinkedIn",
+      handle: "@moviliax",
+      link: "https://linkedin.com/company/moviliax",
+      followers: "28K+"
+    },
+    {
+      icon: Twitter,
+      name: "Twitter / X",
+      handle: "@moviliax",
+      link: "https://twitter.com/moviliax",
+      followers: "15K+"
+    },
+    {
+      icon: Instagram,
+      name: "Instagram",
+      handle: "@moviliax.lat",
+      link: "https://instagram.com/moviliax.lat",
+      followers: "8K+"
+    },
+    {
+      icon: Youtube,
+      name: "YouTube",
+      handle: "Moviliax",
+      link: "https://youtube.com/@moviliax",
+      followers: "5K+"
+    }
+  ];
 
   const faqs = [
     {
-      question: '¿Cuánto tardan en responder?',
-      answer: 'Normalmente respondemos en 24-48 horas hábiles.'
+      question: "¿Cómo puedo escribir para Moviliax?",
+      answer: "Envía tu propuesta a editorial@moviliax.lat con un breve resumen del tema, tu perfil y 2-3 muestras de escritura previa."
     },
     {
-      question: '¿Cómo puedo contribuir con contenido?',
-      answer: 'Selecciona "Colaboración Editorial" en el formulario y cuéntanos tu propuesta.'
+      question: "¿Ofrecen espacios publicitarios?",
+      answer: "Sí, consulta nuestro Media Kit o escribe a partnerships@moviliax.lat para conocer formatos y precios."
     },
     {
-      question: '¿Ofrecen servicios de consultoría?',
-      answer: 'Sí, ofrecemos consultoría especializada en movilidad y electromovilidad para empresas.'
+      question: "¿Puedo republicar contenido de Moviliax?",
+      answer: "Contacta a editorial@moviliax.lat. Generalmente permitimos republicación con atribución y link original."
     },
     {
-      question: '¿Cómo puedo ser sponsor?',
-      answer: 'Visita nuestra página de Sponsors o selecciona ese tema en el formulario de contacto.'
+      question: "¿Organizan eventos presenciales?",
+      answer: "Sí, organizamos eventos trimestrales en principales ciudades LATAM. Suscríbete a nuestro calendario de eventos."
     }
-  ]
+  ];
 
   return (
-    <div className="min-h-screen bg-azul-profundo text-blanco">
-      {/* Hero */}
-      <section className="relative min-h-[50vh] flex items-center justify-center px-6 py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-radial from-azul-profundo/50 to-azul-profundo"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cian-electrico/5 to-transparent animate-scan"></div>
-        
-        <div className="relative z-10 max-w-4xl text-center">
-          <h1 className="font-exo text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-blanco to-cian-electrico bg-clip-text text-transparent">
-            Hablemos del Futuro de la Movilidad
-          </h1>
-          <p className="text-xl text-gris-metalico leading-relaxed max-w-2xl mx-auto">
-            ¿Tienes una idea, proyecto o colaboración en mente? Estamos aquí para escucharte 
-            y construir juntos el ecosistema de movilidad en América Latina.
-          </p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-[#0a0a0f]">
+      {/* Background Effects */}
+      <div className="fixed inset-0 bg-[linear-gradient(to_right,#1a1a2e_1px,transparent_1px),linear-gradient(to_bottom,#1a1a2e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]" />
+      
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <Link 
+            href="/"
+            className="inline-flex items-center gap-2 text-[#00d4ff] hover:text-[#00ffff] transition-colors mb-8 group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Volver al Home
+          </Link>
 
-      {/* Contact Info Cards */}
-      <section className="max-w-7xl mx-auto px-6 py-12 -mt-20 relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {contactInfo.map((item, index) => (
-            <a
-              key={index}
-              href={item.link}
-              className="bg-white/5 backdrop-blur-sm border border-cian-electrico/20 rounded-2xl p-6 text-center hover:border-cian-electrico hover:-translate-y-2 hover:shadow-xl hover:shadow-cian-electrico/20 transition-all duration-300"
-            >
-              <div className="text-5xl mb-4">{item.icon}</div>
-              <h3 className="font-exo text-lg font-bold mb-2 text-cian-electrico">{item.title}</h3>
-              <p className="text-gris-metalico text-sm">{item.info}</p>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* Main Content: Form + Info */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="grid lg:grid-cols-3 gap-12">
-          {/* Contact Form */}
-          <div className="lg:col-span-2">
-            <div className="bg-white/5 border border-cian-electrico/20 rounded-3xl p-8 md:p-12">
-              <h2 className="font-exo text-3xl font-bold mb-2">Envíanos un Mensaje</h2>
-              <p className="text-gris-metalico mb-8">
-                Completa el formulario y nos pondremos en contacto contigo lo antes posible
+          <div className="flex items-center gap-4 mb-6">
+            <div className="p-3 bg-gradient-to-br from-[#00d4ff]/20 to-[#7b2cbf]/20 rounded-2xl border border-[#00d4ff]/30">
+              <MessageSquare className="w-8 h-8 text-[#00d4ff]" />
+            </div>
+            <div>
+              <h1 className="text-5xl md:text-6xl font-bold text-white font-['Exo']">
+                Contacto
+              </h1>
+              <p className="text-xl text-gray-400 mt-2">
+                Estamos Aquí para Ayudarte. Conectemos.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <div className="space-y-6">
-                {/* Nombre */}
-                <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Nombre Completo *
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.nombre}
-                    onChange={(e) => handleChange('nombre', e.target.value)}
-                    placeholder="Tu nombre"
-                    className="w-full px-4 py-3 bg-azul-profundo border border-cian-electrico/30 rounded-xl text-blanco placeholder-gris-metalico focus:outline-none focus:border-cian-electrico transition-colors"
-                  />
+      {/* Contact Form & Info */}
+      <section className="relative py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-5 gap-8">
+            {/* Contact Form - 3 columns */}
+            <div className="md:col-span-3">
+              <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-8 rounded-2xl border border-[#00d4ff]/20">
+                <h2 className="text-3xl font-bold text-white mb-6 font-['Exo']">
+                  Envíanos un Mensaje
+                </h2>
+
+                {submitted ? (
+                  <div className="bg-gradient-to-r from-green-500/10 to-green-600/10 border border-green-500/30 rounded-xl p-8 text-center">
+                    <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
+                    <h3 className="text-2xl font-bold text-white mb-2 font-['Exo']">¡Mensaje Enviado!</h3>
+                    <p className="text-gray-400">
+                      Gracias por contactarnos. Te responderemos en menos de 24 horas.
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-gray-400 mb-2 text-sm">Nombre Completo *</label>
+                        <input
+                          type="text"
+                          name="nombre"
+                          value={formData.nombre}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 bg-[#0a0a0f] border border-[#00d4ff]/30 rounded-xl text-white focus:border-[#00d4ff] focus:outline-none transition-colors"
+                          placeholder="Tu nombre"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-gray-400 mb-2 text-sm">Email *</label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 bg-[#0a0a0f] border border-[#00d4ff]/30 rounded-xl text-white focus:border-[#00d4ff] focus:outline-none transition-colors"
+                          placeholder="tu@email.com"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-gray-400 mb-2 text-sm">Empresa</label>
+                        <input
+                          type="text"
+                          name="empresa"
+                          value={formData.empresa}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-[#0a0a0f] border border-[#00d4ff]/30 rounded-xl text-white focus:border-[#00d4ff] focus:outline-none transition-colors"
+                          placeholder="Tu empresa"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-gray-400 mb-2 text-sm">País</label>
+                        <input
+                          type="text"
+                          name="pais"
+                          value={formData.pais}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-[#0a0a0f] border border-[#00d4ff]/30 rounded-xl text-white focus:border-[#00d4ff] focus:outline-none transition-colors"
+                          placeholder="Tu país"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-gray-400 mb-2 text-sm">Asunto *</label>
+                      <select
+                        name="asunto"
+                        value={formData.asunto}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-4 py-3 bg-[#0a0a0f] border border-[#00d4ff]/30 rounded-xl text-white focus:border-[#00d4ff] focus:outline-none transition-colors"
+                      >
+                        <option value="">Selecciona un asunto</option>
+                        {subjects.map((subject, index) => (
+                          <option key={index} value={subject}>{subject}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-gray-400 mb-2 text-sm">Mensaje *</label>
+                      <textarea
+                        name="mensaje"
+                        value={formData.mensaje}
+                        onChange={handleChange}
+                        required
+                        rows={6}
+                        className="w-full px-4 py-3 bg-[#0a0a0f] border border-[#00d4ff]/30 rounded-xl text-white focus:border-[#00d4ff] focus:outline-none transition-colors resize-none"
+                        placeholder="Cuéntanos cómo podemos ayudarte..."
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full py-4 bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf] text-white font-bold rounded-full hover:shadow-[0_0_30px_rgba(0,212,255,0.5)] transition-all flex items-center justify-center gap-2"
+                    >
+                      <Send className="w-5 h-5" />
+                      Enviar Mensaje
+                    </button>
+
+                    <p className="text-gray-500 text-sm text-center">
+                      Responderemos en menos de 24 horas hábiles
+                    </p>
+                  </form>
+                )}
+              </div>
+            </div>
+
+            {/* Contact Info Sidebar - 2 columns */}
+            <div className="md:col-span-2 space-y-6">
+              {/* Direct Contacts */}
+              <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-6 rounded-2xl border border-[#00d4ff]/20">
+                <h3 className="text-xl font-bold text-white mb-4 font-['Exo']">Contacto Directo</h3>
+                <div className="space-y-4">
+                  {contactInfo.map((contact, index) => (
+                    <a
+                      key={index}
+                      href={contact.link}
+                      className="block bg-[#0a0a0f] p-4 rounded-xl border border-[#00d4ff]/20 hover:border-[#00d4ff]/50 transition-all group"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-[#00d4ff]/10 rounded-lg">
+                          <contact.icon className="w-5 h-5 text-[#00d4ff]" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="font-semibold text-white text-sm mb-1">{contact.title}</div>
+                          <div className="text-[#00d4ff] text-sm mb-1 group-hover:text-[#00ffff] transition-colors">
+                            {contact.value}
+                          </div>
+                          <div className="text-gray-500 text-xs">{contact.description}</div>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
                 </div>
+              </div>
 
-                {/* Email */}
-                <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleChange('email', e.target.value)}
-                    placeholder="tu@email.com"
-                    className="w-full px-4 py-3 bg-azul-profundo border border-cian-electrico/30 rounded-xl text-blanco placeholder-gris-metalico focus:outline-none focus:border-cian-electrico transition-colors"
-                  />
-                </div>
-
-                {/* Empresa */}
-                <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Empresa / Organización
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.empresa}
-                    onChange={(e) => handleChange('empresa', e.target.value)}
-                    placeholder="Nombre de tu empresa (opcional)"
-                    className="w-full px-4 py-3 bg-azul-profundo border border-cian-electrico/30 rounded-xl text-blanco placeholder-gris-metalico focus:outline-none focus:border-cian-electrico transition-colors"
-                  />
-                </div>
-
-                {/* Asunto */}
-                <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Asunto *
-                  </label>
-                  <select
-                    value={formData.asunto}
-                    onChange={(e) => handleChange('asunto', e.target.value)}
-                    className="w-full px-4 py-3 bg-azul-profundo border border-cian-electrico/30 rounded-xl text-blanco focus:outline-none focus:border-cian-electrico transition-colors"
+              {/* Quick Links */}
+              <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-6 rounded-2xl border border-[#00d4ff]/20">
+                <h3 className="text-xl font-bold text-white mb-4 font-['Exo']">Enlaces Rápidos</h3>
+                <div className="space-y-2">
+                  <Link
+                    href="/media-kit"
+                    className="flex items-center gap-2 text-gray-400 hover:text-[#00d4ff] transition-colors"
                   >
-                    <option value="general">Consulta General</option>
-                    <option value="partnership">Alianzas y Partnerships</option>
-                    <option value="prensa">Prensa y Medios</option>
-                    <option value="colaboracion">Colaboración Editorial</option>
-                    <option value="publicidad">Publicidad y Sponsors</option>
-                    <option value="consultoria">Consultoría</option>
-                    <option value="otro">Otro</option>
-                  </select>
-                </div>
-
-                {/* Mensaje */}
-                <div>
-                  <label className="block text-sm font-semibold mb-2">
-                    Mensaje *
-                  </label>
-                  <textarea
-                    value={formData.mensaje}
-                    onChange={(e) => handleChange('mensaje', e.target.value)}
-                    placeholder="Cuéntanos más sobre tu consulta o proyecto..."
-                    rows={6}
-                    className="w-full px-4 py-3 bg-azul-profundo border border-cian-electrico/30 rounded-xl text-blanco placeholder-gris-metalico focus:outline-none focus:border-cian-electrico transition-colors resize-none"
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${
-                    isSubmitting
-                      ? 'bg-gris-metalico cursor-not-allowed'
-                      : 'bg-gradient-to-r from-cian-electrico to-blue-400 text-azul-profundo hover:scale-105 hover:shadow-2xl hover:shadow-cian-electrico/40'
-                  }`}
-                >
-                  {isSubmitting ? '⏳ Enviando...' : '📤 Enviar Mensaje'}
-                </button>
-
-                <p className="text-xs text-gris-metalico text-center">
-                  Al enviar este formulario, aceptas nuestra{' '}
-                  <Link href="/privacidad" className="text-cian-electrico hover:underline">
-                    Política de Privacidad
+                    <FileText className="w-4 h-4" />
+                    <span className="text-sm">Media Kit</span>
                   </Link>
+                  <Link
+                    href="/patrocinadores"
+                    className="flex items-center gap-2 text-gray-400 hover:text-[#00d4ff] transition-colors"
+                  >
+                    <Briefcase className="w-4 h-4" />
+                    <span className="text-sm">Patrocinadores</span>
+                  </Link>
+                  <Link
+                    href="/#newsletter"
+                    className="flex items-center gap-2 text-gray-400 hover:text-[#00d4ff] transition-colors"
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span className="text-sm">Newsletter RadarX</span>
+                  </Link>
+                  <a
+                    href="https://calendly.com/moviliax"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-gray-400 hover:text-[#00d4ff] transition-colors"
+                  >
+                    <Calendar className="w-4 h-4" />
+                    <span className="text-sm">Agendar Reunión</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Response Time */}
+              <div className="bg-gradient-to-r from-[#00d4ff]/10 to-[#7b2cbf]/10 p-6 rounded-2xl border border-[#00d4ff]/30">
+                <div className="flex items-center gap-3 mb-2">
+                  <CheckCircle className="w-5 h-5 text-[#00d4ff]" />
+                  <span className="font-bold text-white">Tiempo de Respuesta</span>
+                </div>
+                <p className="text-gray-400 text-sm">
+                  Respondemos todas las consultas en <span className="text-[#00d4ff] font-semibold">menos de 24 horas hábiles</span>
                 </p>
               </div>
             </div>
           </div>
-
-          {/* Sidebar Info */}
-          <div className="space-y-8">
-            {/* Por qué contactarnos */}
-            <div className="bg-white/5 border border-cian-electrico/20 rounded-3xl p-8">
-              <h3 className="font-exo text-2xl font-bold mb-6">¿Por qué Contactarnos?</h3>
-              <div className="space-y-4">
-                {reasons.map((reason, index) => (
-                  <div key={index} className="flex gap-3">
-                    <div className="text-2xl flex-shrink-0">{reason.icon}</div>
-                    <div>
-                      <h4 className="font-semibold text-sm mb-1">{reason.title}</h4>
-                      <p className="text-xs text-gris-metalico">{reason.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Newsletter CTA */}
-            <div className="bg-gradient-to-br from-cian-electrico/10 to-violeta-tech/10 border border-cian-electrico/30 rounded-3xl p-8 text-center">
-              <div className="text-5xl mb-4">📬</div>
-              <h3 className="font-exo text-xl font-bold mb-3">Newsletter RADARX</h3>
-              <p className="text-sm text-gris-metalico mb-6">
-                Recibe cada domingo insights exclusivos sobre movilidad en LATAM
-              </p>
-              <Link
-                href="/#newsletter"
-                className="inline-block px-6 py-3 bg-gradient-to-r from-cian-electrico to-blue-400 text-azul-profundo font-bold rounded-full hover:scale-105 transition-transform text-sm"
-              >
-                Suscribirme Gratis
-              </Link>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* FAQs */}
-      <section className="max-w-5xl mx-auto px-6 py-20">
-        <h2 className="font-exo text-4xl font-bold text-center mb-4">Preguntas Frecuentes</h2>
-        <p className="text-center text-gris-metalico mb-12 text-lg">
-          Respuestas rápidas a las dudas más comunes
-        </p>
+      {/* Offices */}
+      <section className="relative py-20 px-6 bg-gradient-to-b from-transparent to-[#0a0a0f]">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-white mb-12 text-center font-['Exo']">
+            Nuestras <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf]">Oficinas</span>
+          </h2>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="bg-white/5 border border-cian-electrico/20 rounded-2xl p-6 hover:border-cian-electrico transition-colors"
-            >
-              <h3 className="font-exo text-lg font-bold mb-3 text-cian-electrico">
-                {faq.question}
-              </h3>
-              <p className="text-gris-metalico text-sm leading-relaxed">
-                {faq.answer}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Map Section */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="bg-white/5 border border-cian-electrico/20 rounded-3xl p-12 text-center">
-          <div className="text-7xl mb-6">🌎</div>
-          <h2 className="font-exo text-3xl font-bold mb-4">Cobertura en toda América Latina</h2>
-          <p className="text-gris-metalico max-w-2xl mx-auto mb-8">
-            Desde México hasta Argentina, estamos comprometidos con transformar la movilidad 
-            en toda la región. Trabajamos con partners, instituciones y empresas en 18 países.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            {['🇲🇽 México', '🇧🇷 Brasil', '🇦🇷 Argentina', '🇨🇱 Chile', '🇨🇴 Colombia', '🇵🇪 Perú'].map((country, index) => (
-              <span
+          <div className="grid md:grid-cols-3 gap-6">
+            {offices.map((office, index) => (
+              <div 
                 key={index}
-                className="px-4 py-2 bg-white/10 border border-cian-electrico/30 rounded-full text-sm"
+                className={`bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-8 rounded-2xl border ${
+                  office.isHQ ? 'border-[#00d4ff] shadow-[0_0_30px_rgba(0,212,255,0.2)]' : 'border-[#00d4ff]/20'
+                }`}
               >
-                {country}
-              </span>
+                {office.isHQ && (
+                  <span className="inline-block px-3 py-1 bg-[#00d4ff]/10 text-[#00d4ff] text-xs rounded-full border border-[#00d4ff]/30 mb-4 font-semibold">
+                    HEADQUARTERS
+                  </span>
+                )}
+                <div className="text-4xl mb-4">{office.country.split(' ')[0]}</div>
+                <h3 className="text-2xl font-bold text-white mb-2 font-['Exo']">{office.city}</h3>
+                <div className="flex items-start gap-2 text-gray-400 text-sm mb-3">
+                  <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
+                  <span>{office.address}</span>
+                </div>
+                <div className="text-[#c77dff] text-sm font-semibold">{office.timezone}</div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Social Links */}
-      <section className="max-w-5xl mx-auto px-6 py-12">
-        <div className="text-center">
-          <h3 className="font-exo text-2xl font-bold mb-6">Síguenos en Redes Sociales</h3>
-          <div className="flex justify-center gap-4">
-            {[
-              { icon: '🐦', name: 'Twitter', link: '#' },
-              { icon: '📸', name: 'Instagram', link: '#' },
-              { icon: '💼', name: 'LinkedIn', link: '#' },
-              { icon: '📺', name: 'YouTube', link: '#' },
-              { icon: '🎵', name: 'Spotify', link: '#' }
-            ].map((social, index) => (
+      {/* Social Media */}
+      <section className="relative py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-white mb-12 text-center font-['Exo']">
+            Síguenos en <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf]">Redes Sociales</span>
+          </h2>
+
+          <div className="grid md:grid-cols-4 gap-6">
+            {socialMedia.map((social, index) => (
               <a
                 key={index}
                 href={social.link}
-                className="w-14 h-14 bg-white/10 border border-cian-electrico/30 rounded-full flex items-center justify-center text-2xl hover:bg-cian-electrico/20 hover:border-cian-electrico hover:scale-110 transition-all"
-                title={social.name}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-6 rounded-2xl border border-[#00d4ff]/20 hover:border-[#00d4ff]/50 transition-all hover:shadow-[0_0_20px_rgba(0,212,255,0.2)] text-center group"
               >
-                {social.icon}
+                <div className="w-16 h-16 mx-auto mb-4 bg-[#00d4ff]/10 rounded-full flex items-center justify-center group-hover:bg-[#00d4ff]/20 transition-colors">
+                  <social.icon className="w-8 h-8 text-[#00d4ff]" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2 font-['Exo']">{social.name}</h3>
+                <div className="text-gray-400 text-sm mb-2">{social.handle}</div>
+                <div className="text-[#c77dff] font-semibold text-sm">{social.followers}</div>
               </a>
             ))}
           </div>
         </div>
       </section>
+
+      {/* FAQ */}
+      <section className="relative py-20 px-6 bg-gradient-to-b from-transparent to-[#0a0a0f]">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl font-bold text-white mb-12 text-center font-['Exo']">
+            Preguntas <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf]">Frecuentes</span>
+          </h2>
+
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <div 
+                key={index}
+                className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-6 rounded-xl border border-[#00d4ff]/20"
+              >
+                <h3 className="text-xl font-bold text-white mb-3 font-['Exo']">{faq.question}</h3>
+                <p className="text-gray-400">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className="text-gray-400 mb-4">¿No encuentras lo que buscas?</p>
+            <a
+              href="#form"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#1a1a2e] text-white font-bold rounded-full border border-[#00d4ff]/30 hover:border-[#00d4ff] transition-all"
+            >
+              <MessageSquare className="w-5 h-5" />
+              Envíanos tu Pregunta
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
-  )
+  );
 }
