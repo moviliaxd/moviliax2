@@ -1,12 +1,6 @@
 import NewsletterForm from '@/components/NewsletterForm'
 import Link from 'next/link'
 
-export const metadata = {
-  title: 'MOVILIAX — Radar LATAM de Movilidad',
-  description:
-    'Exploramos, analizamos y conectamos el ecosistema de movilidad en América Latina. Tendencias, análisis y recursos.',
-}
-
 export default function Home() {
   return (
     <main id="main-content">
@@ -18,11 +12,8 @@ export default function Home() {
           
           {/* Particles Effect */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cian-electrico/10 rounded-full blur-3xl motion-safe:animate-pulse-glow motion-reduce:animate-none" />
-            <div
-              className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violeta-tech/10 rounded-full blur-3xl motion-safe:animate-pulse-glow motion-reduce:animate-none"
-              style={{ animationDelay: '1s' }}
-            />
+            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cian-electrico/10 rounded-full blur-3xl animate-pulse-glow" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violeta-tech/10 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1s' }} />
           </div>
 
           <div className="relative z-10 text-center max-w-5xl mx-auto">
@@ -42,19 +33,17 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="#newsletter" 
-                aria-label="Ir al formulario de suscripción"
                 className="btn-primary inline-flex items-center justify-center gap-2"
               >
                 Suscríbete Gratis
-                <span aria-hidden="true">✨</span>
+                <span>✨</span>
               </a>
               <Link 
                 href="#pilares" 
-                aria-label="Ir a los pilares — Explorar contenido"
                 className="btn-secondary inline-flex items-center justify-center gap-2"
               >
                 Explorar Contenido
-                <span aria-hidden="true">📚</span>
+                <span>📚</span>
               </Link>
             </div>
           </div>
@@ -64,7 +53,7 @@ export default function Home() {
         <section id="pilares" className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <span className="text-cian-electrico text-sm font-semibold mb-2 block">Los 3 Pilares</span>
+              <span className="text-cian-electrico text-sm font-semibold mb-2 block">Los Tres Pilares</span>
               <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">Nuestro Enfoque</h2>
               <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
                 Dividimos el ecosistema en tres grandes áreas que definen el futuro del sector.
@@ -74,7 +63,7 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-8">
               {/* Movilidad Humana */}
               <article className="content-card group hover:border-cian-electrico/50">
-                <span className="text-5xl mb-4 block" aria-hidden="true">⚡</span>
+                <span className="text-5xl mb-4 block">⚡</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
                   Movilidad Humana
                 </h3>
@@ -92,25 +81,25 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-cian-electrico mt-1">•</span>
-                    <span>MaaS (Mobility as a Service)</span>
+                    <span>MaaS-Mobility as a Service (Movilidad como servicio)</span>
                   </li>
                 </ul>
                 <Link 
                   href="/movilidad-humana" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline font-semibold"
                 >
-                  Explorar <span aria-hidden="true">→</span>
+                  Explorar <span>→</span>
                 </Link>
               </article>
 
               {/* Logística Inteligente */}
               <article className="content-card group hover:border-violeta-tech/50">
-                <span className="text-5xl mb-4 block" aria-hidden="true">📦</span>
+                <span className="text-5xl mb-4 block">📦</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-violeta-tech transition-colors">
                   Logística Inteligente
                 </h3>
                 <p className="text-gris-metalico mb-6">
-                  El motor de la economía: Carga y Supply Chain.
+                  El motor de la economía: Carga y cadena de suministro (supply chain).
                 </p>
                 <ul className="space-y-2 text-gris-metalico mb-6">
                   <li className="flex items-start gap-2">
@@ -119,26 +108,26 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-violeta-tech mt-1">•</span>
-                    <span>Smart Warehousing</span>
+                    <span>Almacenamiento Inteligente(Smart Warehousing)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-violeta-tech mt-1">•</span>
-                    <span>Nearshoring & Comercio</span>
+                    <span>Acercamiento & Comercio (Nearshoring)</span>
                   </li>
                 </ul>
                 <Link 
                   href="/logistica-inteligente" 
                   className="inline-flex items-center gap-2 text-violeta-tech hover:underline font-semibold"
                 >
-                  Explorar <span aria-hidden="true">→</span>
+                  Explorar <span>→</span>
                 </Link>
               </article>
 
               {/* Deep Tech */}
               <article className="content-card group hover:border-cian-electrico/50">
-                <span className="text-5xl mb-4 block" aria-hidden="true">🤖</span>
+                <span className="text-5xl mb-4 block">🤖</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
-                  Deep Tech
+                  Tecnología Profunda (Deep Tech)
                 </h3>
                 <p className="text-gris-metalico mb-6">
                   La capa transversal de tecnología.
@@ -154,14 +143,14 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-cian-electrico mt-1">•</span>
-                    <span>Blockchain & Trazabilidad</span>
+                    <span>Cadena de Bloques (blockchain) & Trazabilidad</span>
                   </li>
                 </ul>
                 <Link 
                   href="/deep-tech" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline font-semibold"
                 >
-                  Explorar <span aria-hidden="true">→</span>
+                  Explorar <span>→</span>
                 </Link>
               </article>
             </div>
@@ -205,7 +194,7 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 gap-8">
               <article className="content-card group">
-                <span className="text-4xl mb-4 block" aria-hidden="true">📖</span>
+                <span className="text-4xl mb-4 block">📖</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
                   Glosario Tech
                 </h3>
@@ -216,12 +205,12 @@ export default function Home() {
                   href="/glosario" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
                 >
-                  Explorar términos <span aria-hidden="true">→</span>
+                  Explorar términos <span>→</span>
                 </Link>
               </article>
 
               <article className="content-card group">
-                <span className="text-4xl mb-4 block" aria-hidden="true">🗺️</span>
+                <span className="text-4xl mb-4 block">🗺️</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
                   Radar LATAM
                 </h3>
@@ -232,12 +221,12 @@ export default function Home() {
                   href="/radar-latam" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
                 >
-                  Ver el mapa <span aria-hidden="true">→</span>
+                  Ver el mapa <span>→</span>
                 </Link>
               </article>
 
               <article className="content-card group">
-                <span className="text-4xl mb-4 block" aria-hidden="true">🌱</span>
+                <span className="text-4xl mb-4 block">🌱</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
                   Sustainability Watch
                 </h3>
@@ -248,12 +237,12 @@ export default function Home() {
                   href="/sustainability" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
                 >
-                  Ver análisis <span aria-hidden="true">→</span>
+                  Ver análisis <span>→</span>
                 </Link>
               </article>
 
               <article className="content-card group">
-                <span className="text-4xl mb-4 block" aria-hidden="true">🚀</span>
+                <span className="text-4xl mb-4 block">🚀</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
                   Logtech Showroom
                 </h3>
@@ -264,7 +253,7 @@ export default function Home() {
                   href="/logtech-showroom" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
                 >
-                  Ver startups <span aria-hidden="true">→</span>
+                  Ver startups <span>→</span>
                 </Link>
               </article>
             </div>
@@ -284,7 +273,7 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 gap-8">
               <article className="content-card">
-                <span className="text-4xl mb-4 block" aria-hidden="true">🎙️</span>
+                <span className="text-4xl mb-4 block">🎙️</span>
                 <h3 className="text-2xl font-bold mb-3">MOVILIAX Talks</h3>
                 <p className="text-gris-metalico mb-4">
                   El podcast oficial con líderes de la industria. Conversaciones que inspiran.
@@ -293,27 +282,26 @@ export default function Home() {
                   href="/podcast" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
                 >
-                  Escuchar ahora <span aria-hidden="true">→</span>
+                  Escuchar ahora <span>→</span>
                 </Link>
               </article>
 
               <article className="content-card">
-                <span className="text-4xl mb-4 block" aria-hidden="true">📩</span>
+                <span className="text-4xl mb-4 block">📩</span>
                 <h3 className="text-2xl font-bold mb-3">RadarX Newsletter</h3>
                 <p className="text-gris-metalico mb-4">
                   El resumen mensual de "lo que hay que saber" para empezar bien informado.
                 </p>
                 <a 
                   href="#newsletter" 
-                  aria-label="Ir al formulario de suscripción"
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
                 >
-                  Suscríbete gratis <span aria-hidden="true">→</span>
+                  Suscríbete gratis <span>→</span>
                 </a>
               </article>
 
               <article className="content-card">
-                <span className="text-4xl mb-4 block" aria-hidden="true">🤝</span>
+                <span className="text-4xl mb-4 block">🤝</span>
                 <h3 className="text-2xl font-bold mb-3">MOVILIAX Connect</h3>
                 <p className="text-gris-metalico mb-4">
                   Directorio de profesionales, bolsa de trabajo especializada y foros de discusión.
@@ -322,12 +310,12 @@ export default function Home() {
                   href="/connect" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
                 >
-                  Unirse ahora <span aria-hidden="true">→</span>
+                  Unirse ahora <span>→</span>
                 </Link>
               </article>
 
               <article className="content-card">
-                <span className="text-4xl mb-4 block" aria-hidden="true">📚</span>
+                <span className="text-4xl mb-4 block">📚</span>
                 <h3 className="text-2xl font-bold mb-3">Knowledge Lab</h3>
                 <p className="text-gris-metalico mb-4">
                   Descarga de White Papers, casos de éxito y guías técnicas exclusivas.
@@ -336,7 +324,7 @@ export default function Home() {
                   href="/knowledge-lab" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
                 >
-                  Acceder al Lab <span aria-hidden="true">→</span>
+                  Acceder al Lab <span>→</span>
                 </Link>
               </article>
             </div>
