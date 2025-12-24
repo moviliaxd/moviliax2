@@ -18,7 +18,7 @@ export default function Home() {
 
           <div className="relative z-10 text-center max-w-5xl mx-auto">
             <span className="inline-block px-4 py-2 bg-cian-electrico/10 border border-cian-electrico/30 rounded-full text-cian-electrico text-sm font-semibold mb-6">
-              🚀 Plataforma #1 en Movilidad LATAM
+              🚀 Plataforma #1 en Movilidad
             </span>
             
             <h1 className="text-5xl md:text-7xl font-exo font-bold mb-6 leading-tight">
@@ -81,17 +81,15 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-cian-electrico mt-1">•</span>
-                    <span>MaaS-Mobility as a Service (Movilidad como servicio)</span>
+                    <span>MaaS-Movilidad como servicio (Mobility as a Service)</span>
                   </li>
                 </ul>
                 <Link 
                   href="/movilidad-humana" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline font-semibold"
-                >
-                  Explorar <span>→</span>
+                >Explorar <span>→</span>
                 </Link>
               </article>
-
               {/* Logística Inteligente */}
               <article className="content-card group hover:border-violeta-tech/50">
                 <span className="text-5xl mb-4 block">📦</span>
@@ -105,14 +103,14 @@ export default function Home() {
                   <li className="flex items-start gap-2">
                     <span className="text-violeta-tech mt-1">•</span>
                     <span>Última Milla</span>
+                  </li> 
+                  <li className="flex items-start gap-2">
+                    <span className="text-violeta-tech mt-1">•</span>
+                    <span>Almacenamiento Inteligente (Smart Warehousing)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-violeta-tech mt-1">•</span>
-                    <span>Almacenamiento Inteligente(Smart Warehousing)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-violeta-tech mt-1">•</span>
-                    <span>Acercamiento & Comercio (Nearshoring)</span>
+                    <span>Acercamiento y Comercio (Nearshoring)</span>
                   </li>
                 </ul>
                 <Link 
@@ -135,15 +133,15 @@ export default function Home() {
                 <ul className="space-y-2 text-gris-metalico mb-6">
                   <li className="flex items-start gap-2">
                     <span className="text-cian-electrico mt-1">•</span>
-                    <span>IA & Big Data</span>
+                    <span>IA y Big Data</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-cian-electrico mt-1">•</span>
-                    <span>Autonomía & Robótica</span>
+                    <span>Autonomía y Robótica</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-cian-electrico mt-1">•</span>
-                    <span>Cadena de Bloques (blockchain) & Trazabilidad</span>
+                    <span>Cadena de Bloques (blockchain) y Trazabilidad</span>
                   </li>
                 </ul>
                 <Link 
@@ -196,7 +194,7 @@ export default function Home() {
               <article className="content-card group">
                 <span className="text-4xl mb-4 block">📖</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
-                  Glosario Tech
+                  Glosario Tecnológico (Glosario Tech)
                 </h3>
                 <p className="text-gris-metalico mb-4">
                   Democratizar el lenguaje técnico en español. Diccionario interactivo (A-Z).
@@ -212,7 +210,7 @@ export default function Home() {
               <article className="content-card group">
                 <span className="text-4xl mb-4 block">🗺️</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
-                  Radar LATAM
+                  Radar Latinoamericano
                 </h3>
                 <p className="text-gris-metalico mb-4">
                   Monitoreo país por país de la región. Mapa interactivo y reportes breves.
@@ -228,7 +226,7 @@ export default function Home() {
               <article className="content-card group">
                 <span className="text-4xl mb-4 block">🌱</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
-                  Sustainability Watch
+                  Monitor de Sostenibilidad(Sustainability Watch)
                 </h3>
                 <p className="text-gris-metalico mb-4">
                   Seguimiento de metas Net-Zero y ESG. Artículos de análisis de impacto.
@@ -244,11 +242,10 @@ export default function Home() {
               <article className="content-card group">
                 <span className="text-4xl mb-4 block">🚀</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
-                  Logtech Showroom
+                   Exhibición Logística (Logtech Showroom)
                 </h3>
                 <p className="text-gris-metalico mb-4">
-                  Escaparate de startups disruptivas. Entrevistas y reviews de soluciones.
-                </p>
+                  Escaparate de Emprendimientos Disruptivos (Startups)              </p>
                 <Link 
                   href="/logtech-showroom" 
                   className="inline-flex items-center gap-2 text-cian-electrico hover:underline"
@@ -316,9 +313,9 @@ export default function Home() {
 
               <article className="content-card">
                 <span className="text-4xl mb-4 block">📚</span>
-                <h3 className="text-2xl font-bold mb-3">Knowledge Lab</h3>
+                <h3 className="text-2xl font-bold mb-3">Laboratorio de Conocimiento (Knowledge Lab)</h3>
                 <p className="text-gris-metalico mb-4">
-                  Descarga de White Papers, casos de éxito y guías técnicas exclusivas.
+                  Casos de éxito y guías técnicas.
                 </p>
                 <Link 
                   href="/knowledge-lab" 
@@ -336,7 +333,7 @@ export default function Home() {
           <div className="container mx-auto max-w-4xl">
             <div className="bg-gradient-to-br from-cian-electrico/10 to-violeta-tech/10 border border-cian-electrico/30 rounded-2xl p-8 md:p-12 text-center">
               <span className="inline-block px-4 py-2 bg-cian-electrico/20 rounded-full text-cian-electrico text-sm font-semibold mb-4">
-                ⚡ Gratuito & Mensual
+                ⚡ Gratuito y Mensual
               </span>
               
               <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">
