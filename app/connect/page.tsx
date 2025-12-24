@@ -158,8 +158,7 @@ export default function ConnectPage() {
           </h1>
           
           <p className="text-xl md:text-2xl text-gris-metalico mb-10 max-w-3xl mx-auto leading-relaxed">
-            Conecta con más de 5,000 expertos, participa en foros especializados, asiste a eventos exclusivos 
-            y colabora en proyectos que están transformando la movilidad en América Latina.
+            Conecta con expertos, participa en foros especializados y colabora en proyectos que están transformando la logistica y movilidad.
           </p>
 
           {/* Stats */}
@@ -206,7 +205,7 @@ export default function ConnectPage() {
               Discusiones que Importan
             </h2>
             <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
-              Participa en conversaciones sobre los temas más relevantes del ecosistema de movilidad.
+              Participa en conversaciones sobre temas relevantes del ecosistema de logistica y movilidad.
             </p>
           </div>
 
@@ -357,8 +356,7 @@ export default function ConnectPage() {
               ¿Listo para Unirte a la Red?
             </h2>
             <p className="text-gris-metalico text-lg mb-8 max-w-2xl mx-auto">
-              Más de 5,000 profesionales ya están conectados. Participa en foros, eventos exclusivos 
-              y colabora en proyectos que están transformando la movilidad en LATAM.
+            Participa en foros, eventos exclusivos y colabora en proyectos que están transformando la movilidad.
             </p>
             <button 
               onClick={handleRegister}

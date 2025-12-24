@@ -53,7 +53,7 @@ export default function Home() {
         <section id="pilares" className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
-              <span className="text-cian-electrico text-sm font-semibold mb-2 block">Los 3 Pilares</span>
+              <span className="text-cian-electrico text-sm font-semibold mb-2 block">Los Tres Pilares</span>
               <h2 className="text-4xl md:text-5xl font-exo font-bold mb-4">Nuestro Enfoque</h2>
               <p className="text-gris-metalico text-lg max-w-2xl mx-auto">
                 Dividimos el ecosistema en tres grandes áreas que definen el futuro del sector.
@@ -81,7 +81,7 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-cian-electrico mt-1">•</span>
-                    <span>MaaS (Mobility as a Service)</span>
+                    <span>MaaS-Mobility as a Service (Movilidad como servicio)</span>
                   </li>
                 </ul>
                 <Link 
@@ -99,7 +99,7 @@ export default function Home() {
                   Logística Inteligente
                 </h3>
                 <p className="text-gris-metalico mb-6">
-                  El motor de la economía: Carga y Supply Chain.
+                  El motor de la economía: Carga y cadena de suministro (supply chain).
                 </p>
                 <ul className="space-y-2 text-gris-metalico mb-6">
                   <li className="flex items-start gap-2">
@@ -108,11 +108,11 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-violeta-tech mt-1">•</span>
-                    <span>Smart Warehousing</span>
+                    <span>Almacenamiento Inteligente(Smart Warehousing)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-violeta-tech mt-1">•</span>
-                    <span>Nearshoring & Comercio</span>
+                    <span>Acercamiento & Comercio (Nearshoring)</span>
                   </li>
                 </ul>
                 <Link 
@@ -127,7 +127,7 @@ export default function Home() {
               <article className="content-card group hover:border-cian-electrico/50">
                 <span className="text-5xl mb-4 block">🤖</span>
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-cian-electrico transition-colors">
-                  Deep Tech
+                  Tecnología Profunda (Deep Tech)
                 </h3>
                 <p className="text-gris-metalico mb-6">
                   La capa transversal de tecnología.
@@ -143,7 +143,7 @@ export default function Home() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-cian-electrico mt-1">•</span>
-                    <span>Blockchain & Trazabilidad</span>
+                    <span>Cadena de Bloques (blockchain) & Trazabilidad</span>
                   </li>
                 </ul>
                 <Link 
