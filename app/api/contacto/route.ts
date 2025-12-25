@@ -74,14 +74,16 @@ export async function POST(request: NextRequest) {
     // ─────────────────────────────────────────────
     // 5. Guardado en Supabase (no bloqueante)
     // ─────────────────────────────────────────────
-    const { error: dbError } = await supabase.from('contacts').insert([
-      { nombre, email, empresa, asunto: asuntoTexto, mensaje },
-    ])
-
-    if (dbError) {
-      console.error('[SEND_CONTACT] Error Supabase:', dbError)
-    }
-
+    await supabase.from('contact_forms').insert([
+  {
+    nombre,
+    email,
+    empresa,
+    asunto: asuntoTexto,
+    mensaje,
+    status: 'pending'
+  }
+])
     // ─────────────────────────────────────────────
     // 6. Envío de email al equipo MOVILIAX
     // ─────────────────────────────────────────────
