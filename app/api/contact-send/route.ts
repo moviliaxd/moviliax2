@@ -1,4 +1,3 @@
-console.log('[SEND_CONTACT] Endpoint ejecutado')
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
@@ -144,3 +143,4 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+console.log('[SEND_CONTACT] Endpoint ejecutado')
