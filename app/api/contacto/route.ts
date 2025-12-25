@@ -1,3 +1,4 @@
+console.log('[SEND_CONTACT] Endpoint ejecutado')
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
