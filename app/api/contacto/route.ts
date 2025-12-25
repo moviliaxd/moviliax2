@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { Resend } from 'resend'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -7,42 +8,48 @@ export const dynamic = 'force-dynamic'
 export async function POST(request: NextRequest) {
   try {
     // ─────────────────────────────────────────────
-    // 1. Validación de variables de entorno
+    // 1. Variables de entorno
     // ─────────────────────────────────────────────
-    const {
-      RESEND_API_KEY,
-      RESEND_FROM_EMAIL,
-      RESEND_TO_EMAIL,
-      NEXT_PUBLIC_SUPABASE_URL,
-      SUPABASE_SERVICE_ROLE_KEY,
-    } = process.env
+    const RESEND_API_KEY = process.env.RESEND_API_KEY
+    const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL
+    const RESEND_TO_EMAIL = process.env.RESEND_TO_EMAIL
+    const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!RESEND_API_KEY || !RESEND_FROM_EMAIL || !RESEND_TO_EMAIL) {
-      console.error('[SEND_CONTACT] Configuración incompleta de Resend')
-      return NextResponse.json({ error: 'Configuración de email incompleta' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Configuración de email incompleta' },
+        { status: 500 }
+      )
     }
 
-    if (!NEXT_PUBLIC_SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      console.error('[SEND_CONTACT] Configuración incompleta de Supabase')
-      return NextResponse.json({ error: 'Configuración de base de datos incompleta' }, { status: 500 })
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      return NextResponse.json(
+        { error: 'Configuración de base de datos incompleta' },
+        { status: 500 }
+      )
     }
 
     // ─────────────────────────────────────────────
-    // 2. Inicialización de clientes
+    // 2. Inicializar clientes
     // ─────────────────────────────────────────────
-    const { Resend } = await import('resend')
     const resend = new Resend(RESEND_API_KEY)
 
     const supabase = createClient(
-      NEXT_PUBLIC_SUPABASE_URL,
+      SUPABASE_URL,
       SUPABASE_SERVICE_ROLE_KEY
     )
 
     // ─────────────────────────────────────────────
-    // 3. Parseo y validación del body
+    // 3. Parsear body
     // ─────────────────────────────────────────────
     const body = await request.json()
-    const { nombre, email, empresa, asunto, mensaje } = body
+
+    const nombre: string = body.nombre
+    const email: string = body.email
+    const empresa: string = body.empresa ?? null
+    const asunto: string = body.asunto ?? 'general'
+    const mensaje: string = body.mensaje
 
     if (!nombre || !email || !mensaje) {
       return NextResponse.json(
@@ -53,11 +60,14 @@ export async function POST(request: NextRequest) {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      return NextResponse.json({ error: 'Email inválido' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Email inválido' },
+        { status: 400 }
+      )
     }
 
     // ─────────────────────────────────────────────
-    // 4. Normalización de asunto
+    // 4. Normalizar asunto
     // ─────────────────────────────────────────────
     const asuntosMap: Record<string, string> = {
       general: 'Consulta General',
@@ -69,25 +79,46 @@ export async function POST(request: NextRequest) {
       otro: 'Otro',
     }
 
-    const asuntoTexto = asuntosMap[asunto] || 'Consulta General'
+    const asuntoTexto =
+  asuntosMap[asunto as keyof typeof asuntosMap] || 'Consulta General'
 
     // ─────────────────────────────────────────────
-    // 5. Guardado en Supabase (no bloqueante)
+    // 5. Metadata request
     // ─────────────────────────────────────────────
-    await supabase.from('contact_forms').insert([
-  {
-    nombre,
-    email,
-    empresa,
-    asunto: asuntoTexto,
-    mensaje,
-    status: 'pending'
-  }
-])
+    const ipAddress =
+      request.headers.get('x-forwarded-for') ||
+      request.headers.get('x-real-ip') ||
+      'unknown'
+
+    const userAgent =
+      request.headers.get('user-agent') || 'unknown'
+
     // ─────────────────────────────────────────────
-    // 6. Envío de email al equipo MOVILIAX
+    // 6. Insertar en Supabase
     // ─────────────────────────────────────────────
-    const teamEmailResponse = await resend.emails.send({
+    const { error: dbError } = await supabase
+      .from('contact_forms')
+      .insert([
+        {
+          nombre,
+          email,
+          empresa,
+          asunto: asuntoTexto,
+          mensaje,
+          ip_address: ipAddress,
+          user_agent: userAgent,
+          status: 'pending',
+        },
+      ])
+
+    if (dbError) {
+      console.error('[CONTACTO] Supabase error:', dbError)
+    }
+
+    // ─────────────────────────────────────────────
+    // 7. Email al equipo
+    // ─────────────────────────────────────────────
+    await resend.emails.send({
       from: `MOVILIAX <${RESEND_FROM_EMAIL}>`,
       to: [RESEND_TO_EMAIL],
       subject: `Nuevo mensaje de contacto: ${asuntoTexto}`,
@@ -102,47 +133,34 @@ export async function POST(request: NextRequest) {
       `,
     })
 
-    console.log('[SEND_CONTACT] Team email response:', teamEmailResponse)
-
-    if (teamEmailResponse.error) {
-      console.error('[SEND_CONTACT] Error email equipo:', teamEmailResponse.error)
-    }
-
     // ─────────────────────────────────────────────
-    // 7. Envío de email de confirmación al usuario
+    // 8. Email al usuario
     // ─────────────────────────────────────────────
-    const userEmailResponse = await resend.emails.send({
+    await resend.emails.send({
       from: `MOVILIAX <${RESEND_FROM_EMAIL}>`,
       to: [email],
       subject: 'Hemos recibido tu mensaje – MOVILIAX',
       html: `
-        <h2>Hola ${nombre},</h2>
-        <p>Gracias por escribirnos. Hemos recibido tu mensaje sobre <strong>${asuntoTexto}</strong>.</p>
-        <p>Nuestro equipo te responderá en un plazo de 24 a 48 horas.</p>
-        <p>Saludos,<br /><strong>Equipo MOVILIAX</strong></p>
+        <h2>Hola ${nombre}</h2>
+        <p>Gracias por contactarnos. Hemos recibido tu mensaje.</p>
+        <p>Te responderemos pronto.</p>
+        <p><strong>Equipo MOVILIAX</strong></p>
       `,
     })
 
-    console.log('[SEND_CONTACT] User email response:', userEmailResponse)
-
-    if (userEmailResponse.error) {
-      console.error('[SEND_CONTACT] Error email usuario:', userEmailResponse.error)
-    }
-
     // ─────────────────────────────────────────────
-    // 8. Respuesta final
+    // 9. Respuesta final
     // ─────────────────────────────────────────────
     return NextResponse.json(
-      { success: true, message: 'Mensaje recibido y correos enviados' },
+      { success: true },
       { status: 200 }
     )
 
   } catch (error) {
-    console.error('[SEND_CONTACT] Error general:', error)
+    console.error('[CONTACTO] Error general:', error)
     return NextResponse.json(
       { error: 'Error interno del servidor' },
       { status: 500 }
     )
   }
 }
-console.log('[SEND_CONTACT] Endpoint ejecutado')
