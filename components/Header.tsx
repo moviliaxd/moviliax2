@@ -48,7 +48,7 @@ export default function Header() {
         >
           <li>
             <Link 
-              href="/app/contenido" 
+              href="/contenido" 
               className="text-gris-metalico hover:text-cian-electrico transition-colors block py-2 lg:py-0"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -57,7 +57,7 @@ export default function Header() {
           </li>
           <li>
             <Link 
-              href="/app/podcast" 
+              href="/podcast" 
               className="text-gris-metalico hover:text-cian-electrico transition-colors block py-2 lg:py-0"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -66,7 +66,7 @@ export default function Header() {
           </li>
           <li>
             <Link 
-              href="/#comunidad" 
+              href="/connect" 
               className="text-gris-metalico hover:text-cian-electrico transition-colors block py-2 lg:py-0"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -82,15 +82,8 @@ export default function Header() {
               Newsletter
             </Link>
           </li>
-          <li>
-            <Link 
-              href="/#newsletter" 
-              className="bg-cian-electrico text-azul-profundo px-6 py-2 rounded-lg font-semibold hover:bg-opacity-90 transition-all block text-center"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Suscribirse
-            </Link>
-          </li>
+          
+        
         </ul>
       </nav>
     </header>
