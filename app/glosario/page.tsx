@@ -1,575 +1,357 @@
-import Link from 'next/link';
-import { ArrowLeft, Cookie, Shield, Settings, Eye, BarChart3, Target, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
+'use client'
 
-export default function CookiesPage() {
-  const cookieTypes = [
-    {
-      icon: Shield,
-      type: "Cookies Estrictamente Necesarias",
-      status: "Siempre Activas",
-      required: true,
-      description: "Estas cookies son esenciales para que el sitio web funcione correctamente. No se pueden desactivar.",
-      examples: [
-        "Cookies de sesión para mantener tu login",
-        "Cookies de seguridad para prevenir ataques",
-        "Cookies de preferencias básicas de navegación"
-      ],
-      duration: "Sesión o hasta 1 año",
-      canDisable: false
-    },
-    {
-      icon: BarChart3,
-      type: "Cookies Analíticas",
-      status: "Opcionales",
-      required: false,
-      description: "Nos ayudan a entender cómo los visitantes interactúan con nuestro sitio mediante la recopilación de información de forma anónima.",
-      examples: [
-        "Google Analytics (_ga, _gid, _gat)",
-        "Métricas de rendimiento del sitio",
-        "Análisis de comportamiento de usuarios"
-      ],
-      duration: "Hasta 2 años",
-      canDisable: true,
-      providers: ["Google Analytics", "Hotjar"]
-    },
-    {
-      icon: Target,
-      type: "Cookies de Marketing",
-      status: "Opcionales",
-      required: false,
-      description: "Se utilizan para rastrear visitantes en los sitios web. La intención es mostrar anuncios relevantes y atractivos.",
-      examples: [
-        "Cookies de remarketing de Google Ads",
-        "LinkedIn Insight Tag",
-        "Facebook Pixel"
-      ],
-      duration: "Hasta 2 años",
-      canDisable: true,
-      providers: ["Google Ads", "LinkedIn", "Meta"]
-    },
-    {
-      icon: Eye,
-      type: "Cookies de Preferencias",
-      status: "Opcionales",
-      required: false,
-      description: "Permiten que el sitio web recuerde información que cambia la forma en que se comporta o se ve el sitio.",
-      examples: [
-        "Idioma preferido",
-        "Región o país seleccionado",
-        "Configuración de visualización"
-      ],
-      duration: "Hasta 1 año",
-      canDisable: true
-    }
-  ];
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
-  const cookieTable = [
-    {
-      name: "_ga",
-      provider: "Google Analytics",
-      purpose: "Distinguir usuarios únicos",
-      type: "Analítica",
-      duration: "2 años"
-    },
-    {
-      name: "_gid",
-      provider: "Google Analytics",
-      purpose: "Distinguir usuarios únicos",
-      type: "Analítica",
-      duration: "24 horas"
-    },
-    {
-      name: "_gat",
-      provider: "Google Analytics",
-      purpose: "Limitar tasa de solicitudes",
-      type: "Analítica",
-      duration: "1 minuto"
-    },
-    {
-      name: "moviliax_session",
-      provider: "Moviliax",
-      purpose: "Mantener sesión de usuario",
-      type: "Necesaria",
-      duration: "Sesión"
-    },
-    {
-      name: "moviliax_preferences",
-      provider: "Moviliax",
-      purpose: "Guardar preferencias de usuario",
-      type: "Preferencias",
-      duration: "1 año"
-    },
-    {
-      name: "_fbp",
-      provider: "Facebook",
-      purpose: "Entregar y medir anuncios",
-      type: "Marketing",
-      duration: "3 meses"
-    },
-    {
-      name: "li_gc",
-      provider: "LinkedIn",
-      purpose: "Guardar consentimiento de cookies",
-      type: "Marketing",
-      duration: "2 años"
-    }
-  ];
+export default function GlosarioPage() {
+  const [searchTerm, setSearchTerm] = useState('')
+  const [activeLetter, setActiveLetter] = useState('A')
 
-  const thirdParties = [
-    {
-      name: "Google Analytics",
-      purpose: "Análisis de tráfico y comportamiento de usuarios",
-      privacy: "https://policies.google.com/privacy",
-      optOut: "https://tools.google.com/dlpage/gaoptout"
-    },
-    {
-      name: "Google Ads",
-      purpose: "Publicidad y remarketing",
-      privacy: "https://policies.google.com/privacy",
-      optOut: "https://adssettings.google.com/"
-    },
-    {
-      name: "LinkedIn Insight",
-      purpose: "Analytics y conversión de anuncios",
-      privacy: "https://www.linkedin.com/legal/privacy-policy",
-      optOut: "https://www.linkedin.com/psettings/guest-controls"
-    },
-    {
-      name: "Meta Pixel",
-      purpose: "Medición y optimización de campañas",
-      privacy: "https://www.facebook.com/privacy/policy/",
-      optOut: "https://www.facebook.com/settings?tab=ads"
-    }
-  ];
+  // Datos del glosario organizados por letra
+  const glossaryData: Record<string, Array<{ title: string; desc: string }>> = {
+    A: [
+      { title: 'AI (Artificial Intelligence)', desc: 'Simulación de inteligencia humana en máquinas programadas para pensar y aprender como humanos.' },
+      { title: 'Autonomía', desc: 'Capacidad de un vehículo para operar sin intervención humana. Se mide en niveles del 0 al 5 según SAE.' },
+      { title: 'ADAS', desc: 'Advanced Driver Assistance Systems. Sistemas avanzados de asistencia al conductor que mejoran la seguridad.' },
+      { title: 'Amperio-hora (Ah)', desc: 'Unidad de medida de la capacidad de una batería. Indica cuánta energía puede almacenar.' }
+    ],
+    B: [
+      { title: 'BEV (Battery Electric Vehicle)', desc: 'Vehículo eléctrico puro que funciona exclusivamente con baterías eléctricas.' },
+      { title: 'Batería de Litio-Ion', desc: 'Tipo de batería recargable más común en vehículos eléctricos por su alta densidad energética.' },
+      { title: 'BMS (Battery Management System)', desc: 'Sistema de gestión de batería que monitorea y optimiza el rendimiento de las celdas.' },
+      { title: 'Bluetooth Low Energy', desc: 'Tecnología de comunicación inalámbrica de bajo consumo usada en vehículos conectados.' }
+    ],
+    C: [
+      { title: 'Carga Rápida DC', desc: 'Método de carga de corriente directa que permite cargar un EV del 20% al 80% en 30-40 minutos.' },
+      { title: 'CCS (Combined Charging System)', desc: 'Estándar de carga rápida que combina AC y DC en un solo conector.' },
+      { title: 'Connected Car', desc: 'Vehículo equipado con acceso a internet y capacidad de compartir datos con otros dispositivos.' },
+      { title: 'CHAdeMO', desc: 'Estándar japonés de carga rápida DC, competidor del CCS.' },
+      { title: 'CO2', desc: 'Dióxido de carbono. Gas de efecto invernadero principal emitido por vehículos de combustión.' }
+    ],
+    D: [
+      { title: 'Densidad Energética', desc: 'Cantidad de energía almacenada por unidad de peso o volumen de una batería (Wh/kg o Wh/L).' },
+      { title: 'Degradación de Batería', desc: 'Pérdida gradual de capacidad de la batería con el tiempo y uso.' },
+      { title: 'DTE (Distance to Empty)', desc: 'Distancia estimada que puede recorrer un vehículo con la energía restante.' },
+      { title: 'Dual Motor', desc: 'Configuración con dos motores eléctricos, generalmente uno en cada eje para tracción 4WD.' }
+    ],
+    E: [
+      { title: 'EV (Electric Vehicle)', desc: 'Vehículo que utiliza uno o más motores eléctricos para su propulsión.' },
+      { title: 'EVSE (Electric Vehicle Supply Equipment)', desc: 'Equipo que suministra energía eléctrica para cargar vehículos eléctricos.' },
+      { title: 'Eficiencia Energética', desc: 'Relación entre la energía utilizada y la distancia recorrida, medida en kWh/100km o MPGe.' },
+      { title: 'E-mobility', desc: 'Concepto de movilidad basado en vehículos eléctricos y sostenibles.' }
+    ],
+    F: [
+      { title: 'FCEV (Fuel Cell Electric Vehicle)', desc: 'Vehículo eléctrico que genera electricidad a partir de hidrógeno mediante una celda de combustible.' },
+      { title: 'Frenado Regenerativo', desc: 'Sistema que recupera energía durante el frenado y la almacena en la batería.' },
+      { title: 'Fast Charging', desc: 'Carga rápida con potencias superiores a 50 kW que reduce significativamente el tiempo de carga.' },
+      { title: 'Fleet Management', desc: 'Gestión integral de flotas de vehículos incluyendo mantenimiento, rutas y eficiencia.' }
+    ],
+    G: [
+      { title: 'Gigafactory', desc: 'Planta de producción masiva de baterías y vehículos eléctricos, término popularizado por Tesla.' },
+      { title: 'GHG (Greenhouse Gas)', desc: 'Gases de efecto invernadero que contribuyen al calentamiento global.' },
+      { title: 'GPS', desc: 'Sistema de posicionamiento global usado para navegación y gestión de flotas.' },
+      { title: 'Grid', desc: 'Red eléctrica que distribuye electricidad. Los EVs pueden funcionar como almacenamiento distribuido (V2G).' }
+    ],
+    H: [
+      { title: 'HEV (Hybrid Electric Vehicle)', desc: 'Vehículo híbrido que combina motor de combustión con motor eléctrico.' },
+      { title: 'Hidrógeno Verde', desc: 'Hidrógeno producido mediante electrólisis usando energía renovable.' },
+      { title: 'Home Charging', desc: 'Recarga de vehículos eléctricos en el hogar, generalmente durante la noche.' },
+      { title: 'HVAC', desc: 'Sistema de calefacción, ventilación y aire acondicionado que afecta la autonomía del EV.' }
+    ],
+    I: [
+      { title: 'IoT (Internet of Things)', desc: 'Red de dispositivos físicos conectados que recopilan e intercambian datos.' },
+      { title: 'Incentivos Fiscales', desc: 'Beneficios gubernamentales (subsidios, exenciones) para promover la adopción de EVs.' },
+      { title: 'Infraestructura de Carga', desc: 'Red de estaciones y puntos de recarga para vehículos eléctricos.' },
+      { title: 'Inversor', desc: 'Dispositivo que convierte corriente continua (DC) de la batería en corriente alterna (AC) para el motor.' }
+    ],
+    K: [
+      { title: 'kW (Kilowatt)', desc: 'Unidad de potencia. Indica la velocidad de carga o la potencia del motor.' },
+      { title: 'kWh (Kilowatt-hora)', desc: 'Unidad de energía. Mide la capacidad de la batería de un EV.' },
+      { title: 'Kinetic Energy', desc: 'Energía cinética recuperada durante el frenado regenerativo.' }
+    ],
+    L: [
+      { title: 'LiDAR', desc: 'Tecnología de detección por láser usada en vehículos autónomos para mapear el entorno.' },
+      { title: 'Last Mile', desc: 'Última milla. Tramo final de entrega de mercancías, clave en logística urbana.' },
+      { title: 'Level 2 Charging', desc: 'Carga AC de nivel 2 (hasta 22 kW), típica en hogares y lugares de trabajo.' },
+      { title: 'Logística Verde', desc: 'Prácticas logísticas que minimizan el impacto ambiental usando vehículos eléctricos.' }
+    ],
+    M: [
+      { title: 'MaaS (Mobility as a Service)', desc: 'Integración de múltiples servicios de transporte en una sola plataforma accesible bajo demanda.' },
+      { title: 'Micromovilidad', desc: 'Vehículos ligeros como scooters, bicicletas eléctricas para distancias cortas.' },
+      { title: 'MPGe (Miles Per Gallon Equivalent)', desc: 'Medida de eficiencia energética equivalente a millas por galón para EVs.' },
+      { title: 'Motor Eléctrico', desc: 'Dispositivo que convierte energía eléctrica en energía mecánica para propulsar el vehículo.' }
+    ],
+    N: [
+      { title: 'NMC (Nickel Manganese Cobalt)', desc: 'Química de batería común en EVs que balancea energía, potencia y vida útil.' },
+      { title: 'Nivel de Autonomía', desc: 'Clasificación SAE de 0-5 que indica el grado de automatización de un vehículo.' },
+      { title: 'NOx (Óxidos de Nitrógeno)', desc: 'Contaminantes producidos por motores de combustión que los EVs no emiten.' }
+    ],
+    O: [
+      { title: 'OBC (On-Board Charger)', desc: 'Cargador integrado en el vehículo que convierte AC de la red a DC para la batería.' },
+      { title: 'OTA (Over-The-Air)', desc: 'Actualizaciones de software del vehículo entregadas de forma inalámbrica.' },
+      { title: 'Optimización de Rutas', desc: 'Uso de algoritmos para encontrar las rutas más eficientes considerando carga y tráfico.' }
+    ],
+    P: [
+      { title: 'PHEV (Plug-in Hybrid Electric Vehicle)', desc: 'Híbrido enchufable con batería recargable y motor de combustión.' },
+      { title: 'Powertrain', desc: 'Sistema de propulsión completo: motor, transmisión y componentes de entrega de potencia.' },
+      { title: 'Public Charging', desc: 'Estaciones de carga accesibles al público en lugares como centros comerciales y carreteras.' },
+      { title: 'Peak Power', desc: 'Potencia máxima que puede entregar un motor eléctrico durante períodos cortos.' }
+    ],
+    R: [
+      { title: 'Range Anxiety', desc: 'Preocupación del conductor por quedarse sin batería antes de llegar al destino.' },
+      { title: 'Recuperación de Energía', desc: 'Proceso de capturar energía durante el frenado y desaceleración.' },
+      { title: 'RV (Rated Voltage)', desc: 'Voltaje nominal de operación de la batería.' },
+      { title: 'Roaming', desc: 'Capacidad de usar diferentes redes de carga con una sola tarjeta o app.' }
+    ],
+    S: [
+      { title: 'Smart Grid', desc: 'Red eléctrica inteligente que optimiza la distribución de energía.' },
+      { title: 'SOC (State of Charge)', desc: 'Estado de carga de la batería expresado como porcentaje.' },
+      { title: 'SOH (State of Health)', desc: 'Estado de salud de la batería comparado con su capacidad nueva.' },
+      { title: 'Supercharger', desc: 'Red de carga rápida exclusiva de Tesla con potencias de hasta 250 kW.' },
+      { title: 'Smart City', desc: 'Ciudad que usa tecnología IoT para optimizar servicios y mejorar calidad de vida.' }
+    ],
+    T: [
+      { title: 'Telemática', desc: 'Tecnología que combina telecomunicaciones e informática para monitorear vehículos.' },
+      { title: 'Torque Instantáneo', desc: 'Característica de los motores eléctricos que entregan máxima fuerza desde velocidad cero.' },
+      { title: 'TCO (Total Cost of Ownership)', desc: 'Costo total de propiedad incluyendo compra, mantenimiento, combustible y seguro.' },
+      { title: 'Thermal Management', desc: 'Sistema de gestión térmica que mantiene la batería a temperatura óptima.' }
+    ],
+    V: [
+      { title: 'V2G (Vehicle-to-Grid)', desc: 'Tecnología que permite a los EVs devolver energía a la red eléctrica.' },
+      { title: 'V2H (Vehicle-to-Home)', desc: 'Uso del EV como fuente de energía de respaldo para el hogar.' },
+      { title: 'VIN (Vehicle Identification Number)', desc: 'Número único de identificación de cada vehículo.' },
+      { title: 'Voltaje', desc: 'Diferencia de potencial eléctrico. Los EVs modernos usan sistemas de 400V o 800V.' }
+    ],
+    Z: [
+      { title: 'Zero Emission', desc: 'Vehículo de emisión cero que no produce gases contaminantes durante su operación.' },
+      { title: 'ZEV (Zero Emission Vehicle)', desc: 'Categoría regulatoria para vehículos sin emisiones directas de escape.' }
+    ]
+  }
 
-  const controlMethods = [
-    {
-      icon: Settings,
-      title: "Configuración del Navegador",
-      description: "Puedes configurar tu navegador para rechazar cookies o para que te avise cuando se envíen.",
-      links: [
-        { browser: "Chrome", url: "https://support.google.com/chrome/answer/95647" },
-        { browser: "Firefox", url: "https://support.mozilla.org/kb/cookies-information-websites-store-on-your-computer" },
-        { browser: "Safari", url: "https://support.apple.com/guide/safari/manage-cookies-sfri11471/mac" },
-        { browser: "Edge", url: "https://support.microsoft.com/microsoft-edge/delete-cookies-63947406-40ac-c3b8-57b9-2a946a29ae09" }
-      ]
-    },
-    {
-      icon: Shield,
-      title: "Panel de Preferencias",
-      description: "Usa nuestro panel de configuración de cookies para gestionar tus preferencias en cualquier momento.",
-      action: "Abrir Panel de Cookies"
-    },
-    {
-      icon: Target,
-      title: "Herramientas de Opt-Out",
-      description: "Utiliza herramientas de la industria para optar por no recibir publicidad personalizada.",
-      links: [
-        { name: "Your Ad Choices", url: "https://www.youradchoices.com/" },
-        { name: "Network Advertising Initiative", url: "https://optout.networkadvertising.org/" }
-      ]
+  const alphabet = Object.keys(glossaryData).sort()
+
+  // Filtrar términos por búsqueda
+  const getFilteredTerms = () => {
+    if (!searchTerm) return glossaryData
+
+    const filtered: typeof glossaryData = {}
+    Object.entries(glossaryData).forEach(([letter, terms]) => {
+      const matchingTerms = terms.filter(
+        term =>
+          term.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          term.desc.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      if (matchingTerms.length > 0) {
+        filtered[letter] = matchingTerms
+      }
+    })
+    return filtered
+  }
+
+  const filteredData = getFilteredTerms()
+  const filteredAlphabet = Object.keys(filteredData).sort()
+
+  // Scroll to section
+  const scrollToLetter = (letter: string) => {
+    const element = document.getElementById(`letter-${letter}`)
+    if (element) {
+      const offset = 120
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - offset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      })
     }
-  ];
+    setActiveLetter(letter)
+  }
+
+  // Scroll spy
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = filteredAlphabet.map(letter => ({
+        letter,
+        element: document.getElementById(`letter-${letter}`)
+      }))
+
+      const scrollPosition = window.scrollY + 150
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i]
+        if (section.element && section.element.offsetTop <= scrollPosition) {
+          setActiveLetter(section.letter)
+          break
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [filteredAlphabet])
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
-      {/* Background Effects */}
-      <div className="fixed inset-0 bg-[linear-gradient(to_right,#1a1a2e_1px,transparent_1px),linear-gradient(to_bottom,#1a1a2e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000,transparent)]" />
-      
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <Link 
-            href="/"
-            className="inline-flex items-center gap-2 text-[#00d4ff] hover:text-[#00ffff] transition-colors mb-8 group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Volver al Home
-          </Link>
+    <div className="min-h-screen bg-azul-profundo text-blanco">
+      {/* Hero */}
+      <section className="relative px-6 py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-radial from-azul-profundo/50 to-azul-profundo"></div>
+        
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <h1 className="font-exo text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-blanco to-cian-electrico bg-clip-text text-transparent">
+            Glosario Tech de Movilidad
+          </h1>
+          <p className="text-xl text-gris-metalico mb-8 leading-relaxed">
+            Diccionario completo de términos técnicos sobre vehículos eléctricos, 
+            movilidad sostenible y tecnologías emergentes en el sector.
+          </p>
 
-          <div className="flex items-center gap-4 mb-6">
-            <div className="p-3 bg-gradient-to-br from-[#00d4ff]/20 to-[#7b2cbf]/20 rounded-2xl border border-[#00d4ff]/30">
-              <Cookie className="w-8 h-8 text-[#00d4ff]" />
-            </div>
-            <div>
-              <h1 className="text-5xl md:text-6xl font-bold text-white font-['Exo']">
-                Política de Cookies
-              </h1>
-              <p className="text-xl text-gray-400 mt-2">
-                Última actualización: 25 de diciembre de 2024
-              </p>
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto">
+            <div className="relative">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Buscar término (ej: batería, autonomía, carga...)"
+                className="w-full px-6 py-4 bg-white/10 backdrop-blur-sm border border-cian-electrico/30 rounded-full text-blanco placeholder-gris-metalico focus:outline-none focus:border-cian-electrico transition-colors pl-14"
+              />
+              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-2xl">🔍</span>
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-gris-metalico hover:text-blanco transition-colors"
+                >
+                  ✕
+                </button>
+              )}
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-[#00d4ff]/10 to-[#7b2cbf]/10 p-6 rounded-xl border border-[#00d4ff]/30 mt-8">
-            <p className="text-gray-300 leading-relaxed">
-              En Moviliax utilizamos cookies y tecnologías similares para mejorar tu experiencia de navegación, 
-              analizar el tráfico del sitio, personalizar contenido y ofrecer funciones de redes sociales. 
-              Esta política explica qué son las cookies, cómo las usamos y cómo puedes controlarlas.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ¿Qué son las cookies? */}
-      <section className="relative py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-bold text-white mb-8 font-['Exo']">
-            ¿Qué son las <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf]">Cookies?</span>
-          </h2>
-
-          <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-8 rounded-2xl border border-[#00d4ff]/20">
-            <p className="text-gray-300 leading-relaxed mb-6">
-              Las cookies son pequeños archivos de texto que los sitios web almacenan en tu dispositivo cuando los visitas. 
-              Se utilizan ampliamente para hacer que los sitios web funcionen de manera más eficiente, proporcionar información 
-              a los propietarios del sitio y mejorar la experiencia del usuario.
-            </p>
-
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-[#0a0a0f] p-4 rounded-xl border border-[#00d4ff]/20">
-                <AlertCircle className="w-6 h-6 text-[#00d4ff] mb-2" />
-                <h3 className="font-bold text-white mb-2">Propias</h3>
-                <p className="text-gray-400 text-sm">Establecidas por Moviliax.lat directamente</p>
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-6 mt-12 max-w-2xl mx-auto">
+            <div className="text-center">
+              <div className="font-exo text-3xl font-black text-cian-electrico">
+                {Object.values(glossaryData).flat().length}+
               </div>
-              <div className="bg-[#0a0a0f] p-4 rounded-xl border border-[#00d4ff]/20">
-                <AlertCircle className="w-6 h-6 text-[#c77dff] mb-2" />
-                <h3 className="font-bold text-white mb-2">De Terceros</h3>
-                <p className="text-gray-400 text-sm">Establecidas por servicios externos como Google</p>
+              <div className="text-sm text-gris-metalico">Términos</div>
+            </div>
+            <div className="text-center">
+              <div className="font-exo text-3xl font-black text-cian-electrico">
+                {alphabet.length}
               </div>
-              <div className="bg-[#0a0a0f] p-4 rounded-xl border border-[#00d4ff]/20">
-                <AlertCircle className="w-6 h-6 text-[#7b2cbf] mb-2" />
-                <h3 className="font-bold text-white mb-2">Persistentes</h3>
-                <p className="text-gray-400 text-sm">Permanecen tras cerrar el navegador</p>
+              <div className="text-sm text-gris-metalico">Categorías</div>
+            </div>
+            <div className="text-center">
+              <div className="font-exo text-3xl font-black text-cian-electrico">
+                100%
               </div>
+              <div className="text-sm text-gris-metalico">Actualizado</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Tipos de Cookies */}
-      <section className="relative py-20 px-6 bg-gradient-to-b from-transparent to-[#0a0a0f]">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-bold text-white mb-12 font-['Exo']">
-            Tipos de Cookies que <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf]">Utilizamos</span>
-          </h2>
-
-          <div className="space-y-6">
-            {cookieTypes.map((cookie, index) => (
-              <div 
-                key={index}
-                className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-8 rounded-2xl border border-[#00d4ff]/20"
+      {/* Alphabet Navigation - Sticky */}
+      <div className="sticky top-0 z-40 bg-azul-profundo/95 backdrop-blur-lg border-b border-cian-electrico/20 py-4">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-wrap gap-2 justify-center">
+            {filteredAlphabet.map(letter => (
+              <button
+                key={letter}
+                onClick={() => scrollToLetter(letter)}
+                className={`w-10 h-10 rounded-lg font-exo font-bold transition-all ${
+                  activeLetter === letter
+                    ? 'bg-gradient-to-br from-cian-electrico to-violeta-tech text-azul-profundo scale-110'
+                    : 'bg-white/10 text-gris-metalico hover:bg-white/20 hover:text-blanco'
+                }`}
               >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="flex items-start gap-4 flex-1">
-                    <div className="p-3 bg-[#00d4ff]/10 rounded-xl">
-                      <cookie.icon className="w-6 h-6 text-[#00d4ff]" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-white mb-2 font-['Exo']">{cookie.type}</h3>
-                      <p className="text-gray-400 mb-4">{cookie.description}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {cookie.required ? (
-                      <span className="px-4 py-2 bg-green-500/10 text-green-400 text-sm rounded-full border border-green-500/30 font-semibold flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4" />
-                        {cookie.status}
-                      </span>
-                    ) : (
-                      <span className="px-4 py-2 bg-yellow-500/10 text-yellow-400 text-sm rounded-full border border-yellow-500/30 font-semibold flex items-center gap-2">
-                        <Settings className="w-4 h-4" />
-                        {cookie.status}
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="text-sm font-semibold text-gray-400 mb-3">Ejemplos de uso:</h4>
-                    <div className="space-y-2">
-                      {cookie.examples.map((example, i) => (
-                        <div key={i} className="flex items-start gap-2">
-                          <div className="mt-1 w-1.5 h-1.5 bg-[#00d4ff] rounded-full flex-shrink-0" />
-                          <span className="text-gray-300 text-sm">{example}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div className="bg-[#0a0a0f] p-4 rounded-xl border border-[#00d4ff]/20">
-                      <div className="text-sm text-gray-400 mb-1">Duración</div>
-                      <div className="text-white font-semibold">{cookie.duration}</div>
-                    </div>
-                    
-                    {cookie.providers && (
-                      <div className="bg-[#0a0a0f] p-4 rounded-xl border border-[#00d4ff]/20">
-                        <div className="text-sm text-gray-400 mb-2">Proveedores</div>
-                        <div className="flex flex-wrap gap-2">
-                          {cookie.providers.map((provider, i) => (
-                            <span key={i} className="px-2 py-1 bg-[#7b2cbf]/10 text-[#c77dff] text-xs rounded-full border border-[#7b2cbf]/30">
-                              {provider}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="bg-[#0a0a0f] p-4 rounded-xl border border-[#00d4ff]/20">
-                      <div className="flex items-center gap-2">
-                        {cookie.canDisable ? (
-                          <>
-                            <CheckCircle className="w-4 h-4 text-green-400" />
-                            <span className="text-green-400 text-sm font-semibold">Puede desactivarse</span>
-                          </>
-                        ) : (
-                          <>
-                            <XCircle className="w-4 h-4 text-red-400" />
-                            <span className="text-red-400 text-sm font-semibold">No puede desactivarse</span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                {letter}
+              </button>
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Tabla de Cookies */}
-      <section className="relative py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-bold text-white mb-12 font-['Exo']">
-            Cookies <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf]">Específicas</span>
-          </h2>
+      {/* Glossary Content */}
+      <section className="max-w-5xl mx-auto px-6 py-12">
+        {filteredAlphabet.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="font-exo text-2xl font-bold mb-2">No se encontraron términos</h3>
+            <p className="text-gris-metalico mb-6">
+              Intenta con otra palabra clave o navega por el alfabeto
+            </p>
+            <button
+              onClick={() => setSearchTerm('')}
+              className="px-6 py-3 bg-gradient-to-r from-cian-electrico to-blue-400 text-azul-profundo font-bold rounded-full hover:scale-105 transition-transform"
+            >
+              Limpiar Búsqueda
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-12">
+            {filteredAlphabet.map(letter => (
+              <div key={letter} id={`letter-${letter}`} className="scroll-mt-32">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-cian-electrico to-violeta-tech rounded-2xl flex items-center justify-center">
+                    <span className="font-exo text-3xl font-black text-azul-profundo">
+                      {letter}
+                    </span>
+                  </div>
+                  <div className="flex-1 h-0.5 bg-gradient-to-r from-cian-electrico/50 to-transparent"></div>
+                </div>
 
-          <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] rounded-2xl border border-[#00d4ff]/20 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="bg-[#0a0a0f] border-b border-[#00d4ff]/20">
-                    <th className="px-6 py-4 text-left text-sm font-bold text-[#00d4ff]">Nombre</th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-[#00d4ff]">Proveedor</th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-[#00d4ff]">Propósito</th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-[#00d4ff]">Tipo</th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-[#00d4ff]">Duración</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cookieTable.map((cookie, index) => (
-                    <tr key={index} className="border-b border-[#00d4ff]/10 hover:bg-[#0a0a0f]/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <code className="text-sm text-white bg-[#0a0a0f] px-2 py-1 rounded">{cookie.name}</code>
-                      </td>
-                      <td className="px-6 py-4 text-gray-300 text-sm">{cookie.provider}</td>
-                      <td className="px-6 py-4 text-gray-400 text-sm">{cookie.purpose}</td>
-                      <td className="px-6 py-4">
-                        <span className={`px-2 py-1 text-xs rounded-full font-semibold ${
-                          cookie.type === 'Necesaria' ? 'bg-green-500/10 text-green-400 border border-green-500/30' :
-                          cookie.type === 'Analítica' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/30' :
-                          cookie.type === 'Marketing' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' :
-                          'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30'
-                        }`}>
-                          {cookie.type}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-gray-300 text-sm">{cookie.duration}</td>
-                    </tr>
+                <div className="space-y-4">
+                  {filteredData[letter].map((term, index) => (
+                    <div
+                      key={index}
+                      className="bg-white/5 border border-cian-electrico/20 rounded-2xl p-6 hover:border-cian-electrico hover:bg-white/10 transition-all duration-300 group"
+                    >
+                      <h3 className="font-exo text-xl font-bold mb-3 text-cian-electrico group-hover:text-white transition-colors">
+                        {term.title}
+                      </h3>
+                      <p className="text-gris-metalico leading-relaxed">
+                        {term.desc}
+                      </p>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Servicios de Terceros */}
-      <section className="relative py-20 px-6 bg-gradient-to-b from-transparent to-[#0a0a0f]">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-bold text-white mb-12 font-['Exo']">
-            Servicios de <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf]">Terceros</span>
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {thirdParties.map((service, index) => (
-              <div 
-                key={index}
-                className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-6 rounded-2xl border border-[#00d4ff]/20"
-              >
-                <h3 className="text-xl font-bold text-white mb-3 font-['Exo']">{service.name}</h3>
-                <p className="text-gray-400 text-sm mb-4">{service.purpose}</p>
-                
-                <div className="space-y-2">
-                  <a 
-                    href={service.privacy}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-[#00d4ff] hover:text-[#00ffff] transition-colors text-sm"
-                  >
-                    <Shield className="w-4 h-4" />
-                    Ver Política de Privacidad
-                  </a>
-                  <a 
-                    href={service.optOut}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-[#c77dff] hover:text-[#d896ff] transition-colors text-sm"
-                  >
-                    <Settings className="w-4 h-4" />
-                    Configurar Preferencias
-                  </a>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        )}
       </section>
 
-      {/* Cómo Controlar las Cookies */}
-      <section className="relative py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl font-bold text-white mb-12 font-['Exo']">
-            Cómo Controlar las <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf]">Cookies</span>
+      {/* CTA Section */}
+      <section className="max-w-5xl mx-auto px-6 py-20">
+        <div className="bg-gradient-to-br from-cian-electrico/10 to-violeta-tech/10 border border-cian-electrico/30 rounded-3xl p-12 text-center">
+          <div className="text-6xl mb-6">📚</div>
+          <h2 className="font-exo text-4xl font-bold mb-4">
+            ¿Falta algún término?
           </h2>
-
-          <div className="space-y-6">
-            {controlMethods.map((method, index) => (
-              <div 
-                key={index}
-                className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-8 rounded-2xl border border-[#00d4ff]/20"
-              >
-                <div className="flex items-start gap-4 mb-6">
-                  <div className="p-3 bg-[#00d4ff]/10 rounded-xl">
-                    <method.icon className="w-6 h-6 text-[#00d4ff]" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-white mb-2 font-['Exo']">{method.title}</h3>
-                    <p className="text-gray-400">{method.description}</p>
-                  </div>
-                </div>
-
-                {method.links && (
-                  <div className="flex flex-wrap gap-3">
-                    {method.links.map((link, i) => (
-                      <a
-                        key={i}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-4 py-2 bg-[#0a0a0f] text-[#00d4ff] rounded-lg border border-[#00d4ff]/30 hover:border-[#00d4ff] transition-all text-sm font-semibold"
-                      >
-                        {'browser' in link ? link.browser : link.name}
-                      </a>
-                    ))}
-                  </div>
-                )}
-
-                {method.action && (
-                  <button className="px-6 py-3 bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf] text-white font-bold rounded-full hover:shadow-[0_0_30px_rgba(0,212,255,0.5)] transition-all">
-                    {method.action}
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
+          <p className="text-gris-metalico mb-8 text-lg max-w-2xl mx-auto">
+            Este glosario se actualiza constantemente. Si crees que falta algún término 
+            importante, háznoslo saber y lo agregaremos.
+          </p>
+          <Link
+            href="/contacto"
+            className="inline-block px-10 py-4 bg-gradient-to-r from-cian-electrico to-blue-400 text-azul-profundo font-bold rounded-full hover:scale-105 hover:shadow-2xl hover:shadow-cian-electrico/40 transition-all text-lg"
+          >
+            Sugerir Término
+          </Link>
         </div>
       </section>
 
-      {/* Consecuencias de Deshabilitar Cookies */}
-      <section className="relative py-20 px-6 bg-gradient-to-b from-transparent to-[#0a0a0f]">
-        <div className="max-w-5xl mx-auto">
-          <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 p-8 rounded-2xl border border-yellow-500/30">
-            <div className="flex items-start gap-4">
-              <AlertCircle className="w-8 h-8 text-yellow-400 flex-shrink-0" />
-              <div>
-                <h3 className="text-2xl font-bold text-white mb-3 font-['Exo']">
-                  Importante: Consecuencias de Deshabilitar Cookies
-                </h3>
-                <p className="text-gray-300 mb-4">
-                  Si decides deshabilitar o rechazar cookies, algunas partes de nuestro sitio web pueden no funcionar correctamente:
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <div className="mt-1 w-1.5 h-1.5 bg-yellow-400 rounded-full flex-shrink-0" />
-                    <span className="text-gray-300 text-sm">No podrás mantener tu sesión iniciada</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="mt-1 w-1.5 h-1.5 bg-yellow-400 rounded-full flex-shrink-0" />
-                    <span className="text-gray-300 text-sm">Tus preferencias de idioma y región no se guardarán</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="mt-1 w-1.5 h-1.5 bg-yellow-400 rounded-full flex-shrink-0" />
-                    <span className="text-gray-300 text-sm">Algunas funciones interactivas pueden no estar disponibles</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="mt-1 w-1.5 h-1.5 bg-yellow-400 rounded-full flex-shrink-0" />
-                    <span className="text-gray-300 text-sm">No podremos mejorar nuestros servicios basándonos en tu comportamiento</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contacto y Actualizaciones */}
-      <section className="relative py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-8 rounded-2xl border border-[#00d4ff]/20">
-              <h3 className="text-2xl font-bold text-white mb-4 font-['Exo']">Actualizaciones</h3>
-              <p className="text-gray-400 mb-4">
-                Podemos actualizar esta Política de Cookies periódicamente. Te notificaremos de cualquier cambio 
-                significativo mediante un aviso en nuestro sitio web.
-              </p>
-              <div className="text-sm text-[#c77dff]">
-                Última actualización: 25 de diciembre de 2024
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-8 rounded-2xl border border-[#00d4ff]/20">
-              <h3 className="text-2xl font-bold text-white mb-4 font-['Exo']">¿Preguntas?</h3>
-              <p className="text-gray-400 mb-4">
-                Si tienes preguntas sobre nuestra Política de Cookies, no dudes en contactarnos.
-              </p>
-              <Link 
-                href="/contacto"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#00d4ff] to-[#7b2cbf] text-white font-bold rounded-full hover:shadow-[0_0_30px_rgba(0,212,255,0.5)] transition-all"
-              >
-                Contactar
-              </Link>
-            </div>
-          </div>
-
-          {/* Related Links */}
-          <div className="mt-8 bg-gradient-to-br from-[#1a1a2e] to-[#16213e] p-6 rounded-2xl border border-[#00d4ff]/20">
-            <h4 className="font-bold text-white mb-4">Documentos Relacionados</h4>
-            <div className="flex flex-wrap gap-4">
-              <Link 
-                href="/privacidad"
-                className="text-[#00d4ff] hover:text-[#00ffff] transition-colors text-sm"
-              >
-                Política de Privacidad
-              </Link>
-              <Link 
-                href="/terminos"
-                className="text-[#00d4ff] hover:text-[#00ffff] transition-colors text-sm"
-              >
-                Términos y Condiciones
-              </Link>
-              <Link 
-                href="/contacto"
-                className="text-[#00d4ff] hover:text-[#00ffff] transition-colors text-sm"
-              >
-                Contacto
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Back to Top */}
+      <div className="fixed bottom-8 right-8 z-30">
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="w-14 h-14 bg-gradient-to-br from-cian-electrico to-violeta-tech rounded-full flex items-center justify-center text-azul-profundo font-bold text-xl shadow-xl hover:scale-110 transition-transform"
+          title="Volver arriba"
+        >
+          ↑
+        </button>
+      </div>
     </div>
-  );
+  )
 }
