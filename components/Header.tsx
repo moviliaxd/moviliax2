@@ -48,7 +48,7 @@ export default function Header() {
         >
           <li>
             <Link 
-              href="/#contenido" 
+              href="/app/contenido" 
               className="text-gris-metalico hover:text-cian-electrico transition-colors block py-2 lg:py-0"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -57,7 +57,7 @@ export default function Header() {
           </li>
           <li>
             <Link 
-              href="/#podcast" 
+              href="/app/podcast" 
               className="text-gris-metalico hover:text-cian-electrico transition-colors block py-2 lg:py-0"
               onClick={() => setIsMenuOpen(false)}
             >
