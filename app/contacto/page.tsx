@@ -15,26 +15,48 @@ export default function ContactoPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async () => {
-    if (!formData.nombre || !formData.email || !formData.mensaje) {
-      alert('Por favor completa todos los campos requeridos')
+  if (!formData.nombre || !formData.email || !formData.mensaje) {
+    alert('Por favor completa todos los campos requeridos')
+    return
+  }
+
+  setIsSubmitting(true)
+
+  try {
+    const response = await fetch('/api/contacto', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+
+    const result = await response.json()
+
+    if (!response.ok) {
+      console.error('Error backend:', result)
+      alert(result.error || 'Error al enviar el mensaje')
       return
     }
 
-    setIsSubmitting(true)
-    
-    // Simulación de envío
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    alert('¡Mensaje enviado exitosamente! Te contactaremos pronto.')
+    alert('¡Mensaje enviado correctamente! Te contactaremos pronto.')
+
     setFormData({
       nombre: '',
       email: '',
       empresa: '',
       asunto: 'general',
-      mensaje: ''
+      mensaje: '',
     })
+  } catch (error) {
+    console.error('Error de red:', error)
+    alert('Error de conexión. Intenta más tarde.')
+  } finally {
     setIsSubmitting(false)
   }
+}
+
+  
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
