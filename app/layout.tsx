@@ -9,7 +9,8 @@ export const metadata: Metadata = {
   title: 'MOVILIAX - El Futuro de la Movilidad en Movimiento | Plataforma #1 en LATAM',
   description: 'Exploramos, analizamos y conectamos el ecosistema de movilidad en América Latina. Desde vehículos eléctricos hasta ciudades inteligentes.',
   keywords: ['movilidad', 'América Latina', 'vehículos eléctricos', 'EVs', 'ciudades inteligentes', 'transporte sostenible', 'MOVILIAX'],
-  authors: [{ name: 'HLG Innovación Digital' }],
+  authors: [{ name: 'HManuel Innovación Digital' }],
+
   openGraph: {
     type: 'website',
     url: 'https://moviliax.lat/',
