@@ -1,9 +1,10 @@
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { Metadata } from 'next'
-import { ArrowLeft, MessageSquare, Users, TrendingUp } from 'lucide-react'
 
-// Datos de foros (same as in connect page)
+import { notFound } from 'next/navigation'
+import type { Metadata, ResolvingMetadata } from 'next'
+import Link from 'next/link'
+import { ArrowLeft, MessageSquare, TrendingUp } from 'lucide-react'
+
+// Datos de foros
 const FORUMS = [
   {
     title: 'Vehículos Eléctricos',
@@ -91,27 +92,36 @@ const FORUMS = [
   }
 ]
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const forum = FORUMS.find(f => f.slug === params.slug)
-  
-  if (!forum) {
-    return {
-      title: 'Foro no encontrado | MOVILIAX Connect'
-    }
-  }
-
-  return {
-    title: `${forum.title} | Foro | MOVILIAX Connect`,
-    description: forum.longDescription
-  }
+// Tipado oficial para Next.js
+type Props = {
+  params: { slug: string }
 }
 
-export default function ForumPage({ params }: { params: { slug: string } }) {
+// Metadatos optimizados
+export async function generateMetadata(
+  { params }: Props,
+  _parent: ResolvingMetadata
+): Promise<Metadata> {
   const forum = FORUMS.find(f => f.slug === params.slug)
+  return forum
+    ? {
+        title: `${forum.title} | Foro | MOVILIAX Connect`,
+        description: forum.longDescription
+      }
+    : {
+        title: 'Foro no encontrado | MOVILIAX Connect'
+      }
+}
 
-  if (!forum) {
-    notFound()
-  }
+// Rutas estáticas
+export async function generateStaticParams() {
+  return FORUMS.map(f => ({ slug: f.slug }))
+}
+
+// Página principal
+export default function Page({ params }: Props) {
+  const forum = FORUMS.find(f => f.slug === params.slug)
+  if (!forum) notFound()
 
   return (
     <div className="min-h-screen pt-20">
@@ -122,32 +132,22 @@ export default function ForumPage({ params }: { params: { slug: string } }) {
             <ArrowLeft className="w-4 h-4" />
             Volver a Foros
           </Link>
-          
-          <h1 className="text-4xl md:text-5xl font-exo font-bold mb-4">
-            {forum.title}
-          </h1>
-          <p className="text-gris-metalico text-lg mb-8">
-            {forum.longDescription}
-          </p>
+
+          <h1 className="text-4xl md:text-5xl font-exo font-bold mb-4">{forum.title}</h1>
+          <p className="text-gris-metalico text-lg mb-8">{forum.longDescription}</p>
 
           {/* Stats */}
           <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
             <div>
-              <div className="text-2xl md:text-3xl font-exo font-bold text-cian-electrico">
-                {forum.members}
-              </div>
+              <div className="text-2xl md:text-3xl font-exo font-bold text-cian-electrico">{forum.members}</div>
               <div className="text-sm text-gris-metalico">Miembros Activos</div>
             </div>
             <div>
-              <div className="text-2xl md:text-3xl font-exo font-bold text-cian-electrico">
-                {forum.topics}
-              </div>
+              <div className="text-2xl md:text-3xl font-exo font-bold text-cian-electrico">{forum.topics}</div>
               <div className="text-sm text-gris-metalico">Temas</div>
             </div>
             <div>
-              <div className="text-2xl md:text-3xl font-exo font-bold text-cian-electrico">
-                {forum.postsPerDay}
-              </div>
+              <div className="text-2xl md:text-3xl font-exo font-bold text-cian-electrico">{forum.postsPerDay}</div>
               <div className="text-sm text-gris-metalico">Posts/día</div>
             </div>
             <div className="hidden md:block">
@@ -160,7 +160,7 @@ export default function ForumPage({ params }: { params: { slug: string } }) {
         </div>
       </section>
 
-      {/* Content */}
+      {/* Temas recientes */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="grid md:grid-cols-3 gap-8">
@@ -170,19 +170,11 @@ export default function ForumPage({ params }: { params: { slug: string } }) {
               <div className="space-y-4">
                 {forum.recentTopics.map((topic, i) => (
                   <article key={i} className="content-card hover:border-cian-electrico/50 transition-all cursor-pointer group">
-                    <h3 className="font-semibold text-lg mb-2 group-hover:text-cian-electrico transition-colors">
-                      {topic}
-                    </h3>
-                    <p className="text-sm text-gris-metalico mb-3">
-                      Hace 2 horas · 12 respuestas · 89 vistas
-                    </p>
+                    <h3 className="font-semibold text-lg mb-2 group-hover:text-cian-electrico transition-colors">{topic}</h3>
+                    <p className="text-sm text-gris-metalico mb-3">Hace 2 horas · 12 respuestas · 89 vistas</p>
                     <div className="flex gap-2 flex-wrap">
-                      <span className="text-xs px-2 py-1 bg-cian-electrico/10 text-cian-electrico rounded-full">
-                        Discusión
-                      </span>
-                      <span className="text-xs px-2 py-1 bg-white/5 text-gris-metalico rounded-full">
-                        Sin resolver
-                      </span>
+                      <span className="text-xs px-2 py-1 bg-cian-electrico/10 text-cian-electrico rounded-full">Discusión</span>
+                      <span className="text-xs px-2 py-1 bg-white/5 text-gris-metalico rounded-full">Sin resolver</span>
                     </div>
                   </article>
                 ))}
@@ -201,10 +193,8 @@ export default function ForumPage({ params }: { params: { slug: string } }) {
             <aside>
               <div className="content-card sticky top-24">
                 <h3 className="text-xl font-bold mb-4">Sobre este Foro</h3>
-                <p className="text-sm text-gris-metalico mb-6">
-                  {forum.description}
-                </p>
-                
+                <p className="text-sm text-gris-metalico mb-6">{forum.description}</p>
+
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gris-metalico">Moderadores</span>
@@ -231,7 +221,7 @@ export default function ForumPage({ params }: { params: { slug: string } }) {
                 <ul className="space-y-2">
                   {FORUMS.filter(f => f.slug !== forum.slug).slice(0, 3).map((relatedForum, i) => (
                     <li key={i}>
-                      <Link 
+                      <Link
                         href={`/connect/foros/${relatedForum.slug}`}
                         className="text-sm text-cian-electrico hover:text-cian-electrico/80 transition-colors"
                       >

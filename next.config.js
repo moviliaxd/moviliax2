@@ -2,6 +2,24 @@
 const nextConfig = {
   reactStrictMode: true,
   
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'moviliax.lat',
+      },
+      {
+        protocol: 'https',
+        hostname: 'moviliax.online',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+    ],
+    formats: ['image/avif', 'image/webp'],
+  },
+
   // Headers de seguridad
   async headers() {
     return [
@@ -33,31 +51,8 @@ const nextConfig = {
     ]
   },
 
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'moviliax.lat',
-      },
-      {
-        protocol: 'https',
-        hostname: 'moviliax.online',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cdn.sanity.io',
-      },
-    ],
-    formats: ['image/avif', 'image/webp'], // Optimización
-  },
-
-  // Optimización de fuentes
-  optimizeFonts: true,
-
-  // Comprimir assets
   compress: true,
 
-  // Generar sitemap automático
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },

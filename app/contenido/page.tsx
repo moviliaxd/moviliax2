@@ -5,8 +5,8 @@ export default function ContenidoPage() {
         <h1 className="text-5xl font-bold text-white mb-8 font-['Exo']">
           Contenido
         </h1>
-        <p className="text-gray-400">
-          Sección en desarrollo. Próximamente artículos y recursos.
+        <p className="text-gray-400 text-lg">
+          Sección de artículos y recursos en desarrollo.
         </p>
       </div>
     </div>

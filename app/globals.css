@@ -1,7 +1,11 @@
 /* Importar fuentes de Google - Debe ir primero */
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
 
-@import "tailwindcss";
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Resto de tu CSS... */
 
 :root {
   /* Colores personalizados */
@@ -14,10 +18,6 @@
   /* Fuentes */
   --font-family-exo: 'Exo 2', sans-serif;
   --font-family-inter: 'Inter', sans-serif;
-}
-
-* {
-  @apply antialiased;
 }
 
 body {
