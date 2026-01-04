@@ -1,0 +1,6 @@
+# robots.txt for MOVILIAX
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://moviliax.lat/sitemap.xml

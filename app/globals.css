@@ -1,0 +1,146 @@
+/* Importar fuentes de Google - Debe ir primero */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Resto de tu CSS... */
+
+:root {
+  /* Colores personalizados */
+  --color-azul-profundo: #0A0F2C;
+  --color-cian-electrico: #00E0FF;
+  --color-gris-metalico: #9CA3AF;
+  --color-negro-carbon: #0D0D0D;
+  --color-violeta-tech: #6B46FF;
+  
+  /* Fuentes */
+  --font-family-exo: 'Exo 2', sans-serif;
+  --font-family-inter: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--color-azul-profundo);
+  color: white;
+  font-family: var(--font-family-inter);
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-exo);
+}
+
+/* Skip to content para accesibilidad */
+.skip-to-main {
+  position: absolute;
+  top: -2.5rem;
+  left: 0;
+  background-color: var(--color-cian-electrico);
+  color: var(--color-azul-profundo);
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  z-index: 10000;
+  border-radius: 0 0 0.25rem 0;
+}
+
+.skip-to-main:focus {
+  top: 0;
+}
+
+/* Animaciones */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Grid de fondo heroico */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.2;
+  background-image: 
+    linear-gradient(90deg, rgba(0, 224, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(0, 224, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: var(--color-cian-electrico);
+  color: var(--color-azul-profundo);
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-cian-electrico);
+  border: 2px solid var(--color-cian-electrico);
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-cian-electrico);
+  color: var(--color-azul-profundo);
+}
+
+/* Cards */
+.content-card {
+  background: linear-gradient(135deg, var(--color-azul-profundo) 0%, var(--color-negro-carbon) 100%);
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 224, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.content-card:hover {
+  border-color: rgba(0, 224, 255, 0.5);
+}
+
+/* Texto gradiente */
+.text-gradient {
+  background: linear-gradient(135deg, #00E0FF 0%, #6B46FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Respeto a preferencias de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
