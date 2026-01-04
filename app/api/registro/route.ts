@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { createSupabaseAdmin } from '@/lib/supabaseadmin';
+import { createSupabaseAdminClient } from '@/lib/supabase';
 import bcrypt from 'bcrypt';
 
 export const runtime = 'nodejs'
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const supabaseAdmin = createSupabaseAdmin();
+    const supabaseAdmin = createSupabaseAdminClient();
     const { email, password, name } = await req.json();
 
     if (!email || !password || !name) {

@@ -5,14 +5,43 @@
 **MOVILIAX** es una plataforma líder de movilidad en América Latina construida con **Next.js 16** (App Router), TypeScript, Tailwind CSS, y preparada para CMS Sanity. El proyecto conecta el ecosistema de movilidad urbana, vehículos eléctricos, y ciudades inteligentes en LATAM.
 
 **Stack Actual:**
-- **Next.js 16.1** (App Router) + TypeScript 5.9
-- **Tailwind CSS 3.4** (utility-first con colores personalizados)
-- **Supabase** (PostgreSQL) para newsletter_subscribers, leads
-- **Resend** (email delivery para newsletter)
-- **Google Analytics 4** (tracking GA_ID env var)
-- **Next-Auth 4.24** (configurado pero sin activación)
-- **Stripe** (checkout routes para futura monetización)
+- **Next.js 16.1** (App Router) + TypeScript 5.9 (strict mode)
 - **React 18.3** (con hooks y componentes funcionales)
+- **Tailwind CSS 3.4** (utility-first con 6 colores personalizados: azul-profundo, cian-electrico, gris-metalico, gris-oscuro, negro-carbon, violeta-tech)
+- **Supabase** (PostgreSQL) para newsletter_subscribers, leads, y futuras tablas
+- **Resend** (email delivery SMTP para newsletter y contacto)
+- **Google Analytics 4** (GA_ID env var, con tracking automático)
+- **Next-Auth 4.24** (configurado con NEXTAUTH_SECRET, sin rutas protegidas aún activas)
+- **Stripe** (integración pagos, rutas creadas)
+- **Sanity CMS** (configurado, esquemas de ejemplo en `sanity/schemas/`)
+
+**Estado Operacional (2026):** ✅ 100% completo
+- Newsletter: subscripción → Supabase + email Resend ✅
+- Contacto: lead capture con scoring → admin dashboard ✅
+- GA4: tracking automático + eventos personalizados ✅
+- +40 páginas estáticas (movilidad, deep-tech, logística, etc.) ✅
+- Admin leads: dashboard con estadísticas y filtros ✅
+
+
+
+---
+
+## 🎬 Actividades Principales para Agentes de IA
+
+**Cuando trabajes en MOVILIAX, estas son las tareas más comunes:**
+
+1. **Agregar nuevas páginas estáticas** → Copiar estructura de `app/[nombre]/page.tsx` con metadata
+2. **Implementar formularios** → Crear `components/[NombreForm].tsx` ('use client') → API route → Supabase/Resend
+3. **Conectar servicios externos** → Resend para emails, Supabase para datos, GA4 para tracking
+4. **Mantener estilos** → Usar Tailwind con colores personalizados (azul-profundo, cian-electrico, etc.)
+5. **Debugging** → Revisar `.env.local`, logs en `/api/[feature]`, verificar `npm run build`
+
+**Archivos clave a revisar primero:**
+- `app/layout.tsx` - Root layout con metadata y providers
+- `app/api/newsletter/route.ts` - Patrón estándar API (validación → DB → email → GA)
+- `components/Header.tsx` - Ejemplo componente 'use client' con hooks
+- `lib/analytics.ts` - Funciones GA4 reutilizables
+- `app/api/contacto/route.ts` - API más compleja con múltiples integraciones
 
 ---
 
@@ -175,26 +204,64 @@ STRIPE_SECRET_KEY=sk_...
 ### 2. **API Routes Pattern (ESTRICTO)**
 ```typescript
 // /api/[feature]/route.ts
+// ESTRUCTURA EXACTA (ver app/api/contacto/route.ts como referencia)
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+import { Resend } from 'resend'
+
+export const runtime = 'nodejs'           // ← SIEMPRE para rutas que usan Resend/Supabase
+export const dynamic = 'force-dynamic'    // ← SIEMPRE para rutas con POST
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. PRIMERO: Validar env vars
-    if (!process.env.VARIABLE_NAME) {
+    // 1. VALIDAR ENV VARS PRIMERO (líneas 1-25)
+    const API_KEY = process.env.RESEND_API_KEY
+    if (!API_KEY) {
       return NextResponse.json({ error: 'Config error' }, { status: 500 })
     }
     
-    // 2. Parsear y validar request
+    // 2. INICIALIZAR CLIENTES
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+    
+    // 3. PARSEAR Y VALIDAR REQUEST
     const body = await request.json()
-    if (!isValid(body)) {
-      return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
+    const { email } = body
+    
+    // Email regex es CRÍTICA: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json({ error: 'Email inválido' }, { status: 400 })
     }
     
-    // 3. Ejecutar lógica (DB, emails, etc.)
-    // const result = await supabase.from('table').insert(...)
+    // 4. DUPLICADOS CHECK (app/api/newsletter/route.ts línea 43)
+    const { data: existing } = await supabase
+      .from('newsletter_subscribers')
+      .select('email')
+      .eq('email', email)
+      .single()
     
-    // 4. Retornar respuesta
-    return NextResponse.json({ success: true, data }, { status: 200 })
+    if (existing) {
+      return NextResponse.json(
+        { error: 'Este email ya existe' }, 
+        { status: 409 }  // Conflict, no 400
+      )
+    }
+    
+    // 5. OPERACIÓN PRINCIPAL (DB insert + email)
+    const { error: dbError } = await supabase
+      .from('newsletter_subscribers')
+      .insert([{ email, status: 'active', source: 'website' }])
+    
+    if (dbError) {
+      console.error('[NEWSLETTER_ERROR]', dbError)
+      return NextResponse.json({ error: 'DB error' }, { status: 500 })
+    }
+    
+    // 6. RETORNAR SUCCESS
+    return NextResponse.json({ success: true, message: 'Suscrito' }, { status: 200 })
+    
   } catch (error) {
     console.error('[FEATURE_NAME]', error)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
@@ -202,10 +269,11 @@ export async function POST(request: NextRequest) {
 }
 ```
 
-**Validaciones típicas en MOVILIAX:**
-- Email: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
-- Verificar duplicados antes de insertar
-- HTTP status codes: `400` validation, `409` conflict, `500` server error
+**HTTP Status Codes (ESTRICTOS):**
+- `200`: Success
+- `400`: Validation error (email inválido, campo faltante)
+- `409`: Conflict (email ya existe, duplicado)
+- `500`: Server error (DB crash, API key faltante, Resend fail)
 
 ### 3. **Componentes Reutilizables**
 - Guardar en `/components`
@@ -258,9 +326,42 @@ npm run lint            # Validar código (ESLint + TypeScript)
 - **Post-deploy**: Revisar deployments y logs en Vercel dashboard
 - Dominios: moviliax.lat, moviliax.online
 
+### Debugging Común
+- **Newsletter no guarda**: Revisar `SUPABASE_SERVICE_ROLE_KEY` en `.env.local`
+- **Email no envía**: Verificar `RESEND_API_KEY` y que el dominio esté verificado en Resend
+- **GA no trackea**: Verificar `NEXT_PUBLIC_GA_ID` y que el script se cargue (DevTools → Network)
+- **Error 409 (email duplicado)**: La validación en API comprueba `newsletter_subscribers.email`
+- **Build falla**: Ejecutar `npm run lint` para detectar errores TypeScript
+- **Componentes no renderean**: Usar `'use client'` si usan hooks, de lo contrario son server components por defecto
+
 ---
 
-## 🔌 Integraciones Externas (ESTADO ACTUAL)
+## 🧪 Testing en Local (Antes de Push)
+
+### Checklist de Validación
+1. **TypeScript sin errores**: `npm run lint` ✅
+2. **Build completa**: `npm run build` ✅
+3. **Server inicia**: `npm run dev` (verifica puerto 3000) ✅
+4. **Componentes renderean**: Abrir navegador, inspeccionar sin JS errors
+5. **API routes responden**: Usar Postman/curl a `http://localhost:3000/api/[feature]`
+6. **Env vars cargadas**: DevTools → Network → Revisar headers y respuesta
+
+### Comandos Útiles
+```bash
+# Verificar tipos TypeScript
+npx tsc --noEmit
+
+# Limpiar caché y rebuild
+rm -r .next && npm run build
+
+# Ejecutar en modo debug
+NODE_OPTIONS='--inspect' npm run dev
+
+# Revisar qué env vars se cargan
+npm run dev 2>&1 | grep "NEXT_PUBLIC\|SUPABASE\|RESEND"
+```
+
+
 
 | Servicio | Uso | Estado | Requisitos |
 |----------|-----|--------|-----------|
@@ -277,12 +378,16 @@ npm run lint            # Validar código (ESLint + TypeScript)
 
 | Problema | Causa Raíz | Solución |
 |----------|-----------|----------|
-| Email regex falla | Espacios o caracteres especiales | Usar `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` |
-| Supabase 409 conflict | Email duplicado en BD | Verificar `SELECT * FROM newsletter_subscribers WHERE email = ...` |
-| Newsletter endpoint 500 | RESEND_API_KEY o Supabase URL faltando | Verificar `.env.local` y vars en Vercel |
-| Tailwind clases no aplican | Clases nuevas no en content path | Agregar ruta a `tailwind.config.js` content array |
-| Script GA no carga | NEXT_PUBLIC_GA_ID undefined | Verificar variable env y redeploy en Vercel |
-| Build falla con imports | Importar archivo que no existe | Verificar path alias en tsconfig.json |
+| **Email regex falla** | Espacios antes/después | Validar en client: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` (app/api/newsletter/route.ts, línea 31) |
+| **Supabase 409 conflict** | Email duplicado | Query de check existe: `.select('email').eq('email', email).single()` retorna dato |
+| **Newsletter endpoint 500** | Falta RESEND_API_KEY o URLs | Verificar 3 vars en .env.local: RESEND_API_KEY, SUPABASE_URL, SERVICE_ROLE_KEY |
+| **Tailwind clases no aplican** | Clases nuevas en archivos nuevos | content array (tailwind.config.js) cubre `app/**` y `components/**` |
+| **Script GA no carga** | NEXT_PUBLIC_GA_ID undefined o valor incorrecto | Verificar env var es `G-XXXXXXXXXX` (no UA-) y que GoogleAnalytics.tsx esté en ClientProviders |
+| **Build falla con imports** | Rutas incorrectas o archivos faltantes | Verificar alias en tsconfig.json: `@/components/*`, `@/lib/*`, etc. |
+| **Componentes 'use client' son lentos** | Demasiada lógica en client | Mover queries/fetches de BD a server components padre, pasar datos como props |
+| **Supabase throws error en client** | Importar admin client fuera de servidor | Usar `lib/supabase.ts` (service role) SOLO en `/api`, nunca en componentes 'use client' |
+| **Resend retorna 400** | Headers o estructura email mal | Verificar estructura en app/api/newsletter/route.ts línea ~75: `from`, `to`, `html` |
+| **Middleware auth no protege ruta** | NextAuth headers no en lugar | Middleware no implementado aún - Las rutas `/admin` y `/dashboard` existen pero SIN protección activa |
 
 ---
 

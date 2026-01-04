@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@/lib/supabaseadmin"
+import { createSupabaseAdminClient } from "@/lib/supabase"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 export const authOptions = {
@@ -12,6 +12,12 @@ export const authOptions = {
 
       async authorize(credentials) {
         if (!credentials?.email) return null
+
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          return null
+        }
+
+        const supabaseAdmin = createSupabaseAdminClient()
 
         const { data: user, error } = await supabaseAdmin
           .from("usuarios")

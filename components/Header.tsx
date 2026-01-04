@@ -30,10 +30,11 @@ export default function Header() {
 
         {/* Menu Toggle Button (Mobile) */}
         <button
+          type="button"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className="lg:hidden flex flex-col gap-1.5 p-2"
           aria-label="Abrir menú de navegación"
-          aria-expanded={isMenuOpen ? 'true' : 'false'}
+          aria-expanded={isMenuOpen}
         >
           <span className={`block w-6 h-0.5 bg-white transition-transform ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
           <span className={`block w-6 h-0.5 bg-white transition-opacity ${isMenuOpen ? 'opacity-0' : ''}`} />

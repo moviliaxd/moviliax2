@@ -2,7 +2,7 @@ import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import type { JWT } from 'next-auth/jwt';
 import type { User as NextAuthUser, Session as NextAuthSession } from 'next-auth';
-import { supabaseAdmin } from '@/lib/supabaseadmin';
+import { createSupabaseAdminClient } from '@/lib/supabase';
 
 /**
  * Tipos extendidos para token / user / session
@@ -55,11 +55,14 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email) return null;
 
-        // Validar que supabaseAdmin esté inicializado
-        if (!supabaseAdmin) {
-          console.error('[AUTH] Supabase Admin no está inicializado');
+        // Validar que tengamos las credenciales de Supabase
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+          console.error('[AUTH] Supabase credentials not configured');
           return null;
         }
+
+        // Crear cliente Supabase
+        const supabaseAdmin = createSupabaseAdminClient();
 
         // Buscar usuario en Supabase
         const { data: user, error } = await supabaseAdmin

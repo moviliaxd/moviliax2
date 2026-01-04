@@ -19,7 +19,66 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { email, nombre, empresa, puesto, pais, telefono, linkedin_url, plan = 'free' } = body
 
-    // ... resto del código igual (sin cambios) ...
+    // Validar campos requeridos
+    if (!email || !nombre) {
+      return NextResponse.json(
+        { error: 'Email y nombre son obligatorios' },
+        { status: 400 }
+      )
+    }
+
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Email inválido' },
+        { status: 400 }
+      )
+    }
+
+    // Verificar si ya existe
+    const { data: existing } = await supabase
+      .from('connect_members')
+      .select('email')
+      .eq('email', email)
+      .single()
+
+    if (existing) {
+      return NextResponse.json(
+        { error: 'Este email ya está registrado' },
+        { status: 409 }
+      )
+    }
+
+    // Insertar nuevo miembro
+    const { error: insertError } = await supabase
+      .from('connect_members')
+      .insert([
+        {
+          email,
+          nombre,
+          empresa,
+          puesto,
+          pais,
+          telefono,
+          linkedin_url,
+          plan,
+          joined_at: new Date().toISOString(),
+        },
+      ])
+
+    if (insertError) {
+      console.error('Database error:', insertError)
+      return NextResponse.json(
+        { error: 'Error al registrar' },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json(
+      { message: 'Registro exitoso' },
+      { status: 201 }
+    )
   } catch (error) {
     console.error('Connect registration error:', error)
     return NextResponse.json(
