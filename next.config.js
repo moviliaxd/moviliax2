@@ -1,4 +1,3 @@
-@'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -6,11 +5,6 @@ const nextConfig = {
   // ✅ SEGURIDAD: TypeScript strict mode
   typescript: {
     ignoreBuildErrors: false,
-  },
-  
-  // ✅ SEGURIDAD: ESLint strict mode
-  eslint: {
-    ignoreDuringBuilds: false,
   },
   
   // ✅ SEGURIDAD: Remover header X-Powered-By
@@ -79,4 +73,3 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
-'@ | Out-File -FilePath "next.config.js" -Encoding UTF8 -Force
