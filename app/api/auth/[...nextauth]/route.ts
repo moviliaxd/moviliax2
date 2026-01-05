@@ -3,10 +3,11 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import type { JWT } from 'next-auth/jwt';
 import type { User as NextAuthUser, Session as NextAuthSession } from 'next-auth';
 import { createSupabaseAdminClient } from '@/lib/supabase';
+import { compare } from 'bcryptjs';
+import { logger } from '@/lib/logger';
 
 /**
  * Tipos extendidos para token / user / session
- * Ajusta las propiedades según tu tabla `usuarios`.
  */
 type ExtendedUser = NextAuthUser & {
   id: string;
@@ -33,7 +34,7 @@ type ExtendedJWT = JWT & {
 type ExtendedSession = NextAuthSession & {
   user: {
     id: string;
-    email?: string;  // ✅ CAMBIO: string | undefined (NO null)
+    email?: string;
     nombre?: string;
     apellido?: string;
     empresa?: string;
@@ -53,47 +54,67 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email) return null;
+        if (!credentials?.email || !credentials?.password) {
+          logger.warn('Auth attempt without email or password');
+          return null;
+        }
 
         // Validar que tengamos las credenciales de Supabase
         if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-          console.error('[AUTH] Supabase credentials not configured');
+          logger.error('Supabase credentials not configured');
           return null;
         }
 
-        // Crear cliente Supabase
-        const supabaseAdmin = createSupabaseAdminClient();
+        try {
+          // Crear cliente Supabase
+          const supabaseAdmin = createSupabaseAdminClient();
 
-        // Buscar usuario en Supabase
-        const { data: user, error } = await supabaseAdmin
-          .from('usuarios')
-          .select('*')
-          .eq('email', credentials.email.toLowerCase())
-          .single();
+          // Buscar usuario en Supabase
+          const { data: user, error } = await supabaseAdmin
+            .from('usuarios')
+            .select('*')
+            .eq('email', credentials.email.toLowerCase())
+            .single();
 
-        if (error || !user) {
-          console.error('[AUTH] Usuario no encontrado:', error?.message);
+          if (error || !user) {
+            logger.warn('User not found', { email: credentials.email });
+            return null;
+          }
+
+          // ✅ SEGURIDAD: Validar que el usuario tenga password_hash
+          if (!user.password_hash) {
+            logger.error('User has no password_hash', { userId: user.id });
+            return null;
+          }
+
+          // ✅ SEGURIDAD: Validar password con bcrypt
+          const isValidPassword = await compare(credentials.password, user.password_hash);
+          
+          if (!isValidPassword) {
+            logger.warn('Invalid password attempt', { email: credentials.email });
+            return null;
+          }
+
+          logger.info('User authenticated successfully', { userId: user.id });
+
+          // Normalizar y devolver usuario
+          const returnedUser: ExtendedUser = {
+            id: user.id,
+            email: user.email ?? null,
+            nombre: user.nombre ?? undefined,
+            apellido: user.apellido ?? undefined,
+            empresa: user.empresa ?? undefined,
+            pais: user.pais ?? undefined,
+            intereses: user.intereses ?? [],
+            emailVerificado: !!user.emailVerificado,
+            estado: user.estado ?? null,
+          };
+
+          return returnedUser;
+        } catch (error) {
+          logger.error('Auth error', error as Error);
           return null;
         }
-
-        // Si guardas contraseña hasheada, valida aquí.
-        // Ejemplo: const isValid = await compare(credentials.password, user.password_hash);
-        // if (!isValid) return null;
-
-        // Normalizar y devolver un objeto que NextAuth pueda usar como "user"
-        const returnedUser: ExtendedUser = {
-          id: user.id,
-          email: user.email ?? null,
-          nombre: user.nombre ?? undefined,
-          apellido: user.apellido ?? undefined,
-          empresa: user.empresa ?? undefined,
-          pais: user.pais ?? undefined,
-          intereses: user.intereses ?? [],
-          emailVerificado: !!user.emailVerificado,
-          estado: user.estado ?? null,
-        };
-
-        return returnedUser;
       },
     }),
   ],
@@ -101,7 +122,6 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    // jwt callback: token inicializado o actualizado al iniciar sesión
     async jwt({
       token,
       user,
@@ -122,7 +142,6 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
-    // session callback: construir session.user a partir del token
     async session({
       session,
       token,
@@ -130,15 +149,13 @@ export const authOptions: NextAuthOptions = {
       session: ExtendedSession;
       token: ExtendedJWT;
     }): Promise<ExtendedSession> {
-      // Validar que token.id existe antes de asignarlo
       if (!token.id) {
-        throw new Error('Token ID no está disponible. Verifica tus variables de entorno.');
+        throw new Error('Token ID no está disponible');
       }
 
-      // Aseguramos que session.user exista y asignamos campos desde token
       session.user = {
         id: token.id,
-        email: session.user?.email,  // ✅ Sin ?? null
+        email: session.user?.email,
         nombre: token.nombre,
         apellido: token.apellido,
         empresa: token.empresa,

@@ -1,6 +1,20 @@
+@'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  
+  // ✅ SEGURIDAD: TypeScript strict mode
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  
+  // ✅ SEGURIDAD: ESLint strict mode
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  
+  // ✅ SEGURIDAD: Remover header X-Powered-By
+  poweredByHeader: false,
   
   images: {
     remotePatterns: [
@@ -55,6 +69,14 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
+  
+  // ✅ Logging por entorno
+  logging: {
+    fetches: {
+      fullUrl: process.env.NODE_ENV === 'development',
+    },
+  },
 }
 
 module.exports = nextConfig
+'@ | Out-File -FilePath "next.config.js" -Encoding UTF8 -Force
