@@ -1,27 +1,36 @@
-import { NextResponse } from 'next/server';
-import { createSupabaseAdminClient } from '@/lib/supabase';
-import { logger } from '@/lib/logger';
-import { validators } from '@/lib/validators';
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+import { Resend } from 'resend';
 import bcrypt from 'bcrypt';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-export async function POST(req: Request) {
+export async function POST(request: NextRequest) {
   try {
-    // Validar configuración
+    // 1. Verificar variables de entorno
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      logger.error('Supabase configuration missing');
+      console.error('Credenciales de Supabase no configuradas');
       return NextResponse.json(
         { error: 'Configuración del servidor incompleta' },
         { status: 500 }
       );
     }
 
-    const supabaseAdmin = createSupabaseAdminClient();
-    const { email, password, name, empresa, pais, linkedin } = await req.json();
+    if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY no está configurado');
+    }
 
-    // Validaciones
+    // 2. Crear cliente Supabase (igual que newsletter)
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+
+    // 3. Parsear body
+    const { email, password, name, empresa, pais, linkedin } = await request.json();
+
+    // 4. Validar campos obligatorios
     if (!email || !password || !name) {
       return NextResponse.json(
         { error: 'Email, contraseña y nombre son obligatorios' },
@@ -29,91 +38,94 @@ export async function POST(req: Request) {
       );
     }
 
-    // Validar email
-    if (!validators.email(email)) {
+    // 5. Validar email
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json(
         { error: 'Email inválido' },
         { status: 400 }
       );
     }
 
-    // Validar contraseña
-    const passwordValidation = validators.password(password);
-    if (!passwordValidation.valid) {
+    // 6. Validar contraseña
+    if (password.length < 8) {
       return NextResponse.json(
-        { error: `Contraseña inválida: ${passwordValidation.errors.join(', ')}` },
+        { error: 'La contraseña debe tener al menos 8 caracteres' },
         { status: 400 }
       );
     }
 
-    // Validar SQL injection
-    if (!validators.sqlInjection(name) || !validators.sqlInjection(email)) {
+    // 7. Verificar si ya existe
+    const { data: existingUser } = await supabase
+      .from('usuarios')
+      .select('email')
+      .eq('email', email.toLowerCase())
+      .single();
+
+    if (existingUser) {
       return NextResponse.json(
-        { error: 'Entrada inválida detectada' },
-        { status: 400 }
+        { error: 'Este email ya está registrado' },
+        { status: 409 }
       );
     }
 
-    // Cifrar la contraseña
+    // 8. Hashear contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Crear usuario en Supabase Auth
-    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
-      email: email.toLowerCase().trim(),
-      password,
-      email_confirm: true,
-      user_metadata: { 
-        name: validators.xss(name.trim()),
-        empresa: empresa ? validators.xss(empresa.trim()) : null,
-        pais: pais || null,
-        linkedin: linkedin || null
-      },
-    });
-
-    if (authError) {
-      logger.error('Auth error', { error: authError.message });
-      return NextResponse.json(
-        { error: authError.message },
-        { status: 400 }
-      );
-    }
-
-    // Guardar en la tabla "usuarios" (no "profiles")
-    const { error: dbError } = await supabaseAdmin.from('usuarios').insert({
-      id: authData.user.id,
-      nombre: validators.xss(name.trim()),
-      email: email.toLowerCase().trim(),
-      password_hash: hashedPassword,
-      empresa: empresa ? validators.xss(empresa.trim()) : null,
-      pais: pais || null,
-      linkedin: linkedin || null,
-      created_at: new Date().toISOString(),
-    });
+    // 9. Guardar en base de datos
+    const { error: dbError } = await supabase
+      .from('usuarios')
+      .insert([
+        {
+          email: email.toLowerCase().trim(),
+          nombre: name.trim(),
+          password_hash: hashedPassword,
+          empresa: empresa?.trim() || null,
+          pais: pais || null,
+          linkedin: linkedin?.trim() || null,
+          created_at: new Date().toISOString(),
+          emailVerificado: false,
+        },
+      ]);
 
     if (dbError) {
-      logger.error('Database error', { error: dbError.message });
-      // Intentar limpiar el usuario de Auth si falla la inserción en BD
-      await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
+      console.error('Database error:', dbError);
       return NextResponse.json(
-        { error: `Error al guardar datos: ${dbError.message}` },
+        { error: 'Error al guardar usuario: ' + dbError.message },
         { status: 500 }
       );
     }
 
-    logger.info('User registered successfully', { userId: authData.user.id });
-
-    return NextResponse.json({ 
-      message: 'Usuario registrado exitosamente',
-      user: { 
-        id: authData.user.id,
-        email: authData.user.email 
+    // 10. Enviar email de bienvenida (opcional)
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({
+          from: 'MOVILIAX <newsletter@moviliax.lat>',
+          to: email,
+          subject: '¡Bienvenido a MOVILIAX! 🚀',
+          html: `
+            <h2>¡Hola ${name}!</h2>
+            <p>Gracias por registrarte en MOVILIAX.</p>
+            <p>Tu cuenta ha sido creada exitosamente.</p>
+            <p><strong>Equipo MOVILIAX</strong></p>
+          `,
+        });
+      } catch (emailError) {
+        console.error('Email error:', emailError);
+        // No fallar si el email no se envía
       }
+    }
+
+    // 11. Respuesta exitosa
+    return NextResponse.json({
+      success: true,
+      message: 'Usuario registrado exitosamente',
     });
 
-  } catch (error: any) {
-    logger.error('Registration error', error);
+  } catch (error) {
+    console.error('Registration error:', error);
     return NextResponse.json(
-      { error: error.message || 'Error al registrar usuario' },
+      { error: 'Error interno del servidor' },
       { status: 500 }
     );
   }
