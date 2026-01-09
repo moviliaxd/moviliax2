@@ -1,4 +1,4 @@
-// app/dashboard/page.tsx
+﻿// app/dashboard/page.tsx
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
@@ -13,7 +13,7 @@ export default async function DashboardPage() {
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p>Bienvenido, {session.user?.name}</p>
+      <p>Bienvenido, {session.user?.nombre}</p>
     </div>
   )
 }

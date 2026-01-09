@@ -1,52 +1,52 @@
-'use client';
+﻿'use client'
+import { createSupabaseClient } from '@/lib/supabase'
+import { useEffect, useState } from 'react'
 
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+interface User {
+  id: string
+  email: string
+  nombre: string
+  apellido?: string
+  empresa?: string
+  created_at: string
+}
 
 export default function UserList() {
-  const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const { data, error } = await supabase.from('users').select('*');
-        
-        if (error) {
-          setError(error.message);
-        } else {
-          setUsers(data || []);
-        }
-      } catch (err) {
-        setError('Error al cargar usuarios');
-      } finally {
-        setLoading(false);
+    async function fetchUsers() {
+      const supabase = createSupabaseClient()
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('id, email, nombre, apellido, empresa, created_at')
+        .order('created_at', { ascending: false })
+        .limit(10)
+
+      if (error) {
+        console.error('Error:', error)
+      } else {
+        setUsers(data || [])
       }
-    };
+      setLoading(false)
+    }
 
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  }, [])
 
-  if (loading) return <div>Cargando usuarios...</div>;
-  if (error) return <div className="text-red-600">Error: {error}</div>;
+  if (loading) return <p>Cargando usuarios...</p>
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">Lista de Usuarios</h2>
-      {users.length === 0 ? (
-        <p>No hay usuarios registrados</p>
-      ) : (
-        <ul className="space-y-2">
-          {users.map((user) => (
-            <li key={user.id} className="p-2 border rounded">
-              {user.name || user.email}
-            </li>
-          ))}
-        </ul>
-      )}
+      <h2>Usuarios Registrados</h2>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            {user.nombre} {user.apellido} - {user.email}
+          </li>
+        ))}
+      </ul>
     </div>
-  );
+  )
 }
-
