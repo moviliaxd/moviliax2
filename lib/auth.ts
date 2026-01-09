@@ -1,4 +1,3 @@
-// lib/auth.ts
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { createSupabaseAdminClient } from './supabase'
@@ -19,18 +18,16 @@ export const authOptions: NextAuthOptions = {
 
         const supabase = createSupabaseAdminClient()
         
-        // Buscar usuario en Supabase
         const { data: usuario, error } = await supabase
           .from('usuarios')
           .select('*')
           .eq('email', credentials.email.toLowerCase())
-          .single()
+          .maybeSingle()
 
         if (error || !usuario) {
           return null
         }
 
-        // Verificar contraseña
         const isValid = await bcrypt.compare(
           credentials.password,
           usuario.password_hash
@@ -40,7 +37,6 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        // Actualizar last_login
         await supabase
           .from('usuarios')
           .update({ last_login: new Date().toISOString() })
@@ -49,14 +45,17 @@ export const authOptions: NextAuthOptions = {
         return {
           id: usuario.id,
           email: usuario.email,
-          name: usuario.nombre,
+          nombre: usuario.nombre,
+          apellido: usuario.apellido,
+          empresa: usuario.empresa,
+          pais: usuario.pais
         }
       }
     })
   ],
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 días
+    maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
     signIn: '/login',
@@ -66,12 +65,16 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.nombre = user.nombre
+        token.apellido = user.apellido
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
+        session.user.nombre = token.nombre as string
+        session.user.apellido = token.apellido as string
       }
       return session
     }
