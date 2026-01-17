@@ -24,6 +24,7 @@
   "author": "HLG Innovación Digital",
   "license": "ISC",
   "dependencies": {
+    "@react-email/components": "^1.0.4",
     "@stripe/stripe-js": "^8.6.0",
     "@supabase/supabase-js": "^2.90.1",
     "bcrypt": "^6.0.0",
@@ -36,7 +37,7 @@
     "nodejs": "^0.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "resend": "^6.6.0",
+    "resend": "^6.7.0",
     "stripe": "^20.1.0"
   },
   "devDependencies": {
