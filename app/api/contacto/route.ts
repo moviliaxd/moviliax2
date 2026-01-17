@@ -34,8 +34,8 @@ export async function POST(request: NextRequest) {
 
     // 📩 Email para tu equipo
     await resend.emails.send({
-      from: "Contacto Web <contacto@tudominio.com>",
-      to: ["soporte@tudominio.com"],
+      from: "contacto@moviliax.lat",
+      to: ["moviliaxdigital@gmail.com"],
       subject: `Nuevo contacto: ${asunto || "Sin asunto"}`,
       html: `
         <h3>Nuevo mensaje de contacto</h3>
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 
     // 📬 Email de confirmación al usuario
     await resend.emails.send({
-      from: "Tu Empresa <contacto@tudominio.com>",
+      from: "contacto@moviliax.lat",
       to: [email],
       subject: "Recibimos tu mensaje 🙌",
       html: `
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         <p>Gracias por contactarnos. Hemos recibido tu mensaje y te responderemos a la brevedad.</p>
         <p><strong>Asunto:</strong> ${asunto || "-"}</p>
         <br />
-        <p>— Equipo de Tu Empresa</p>
+        <p>— Equipo de Moviliax</p>
       `,
     });
 

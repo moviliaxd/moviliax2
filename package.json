@@ -25,6 +25,9 @@
   "license": "ISC",
   "dependencies": {
     "@react-email/components": "^1.0.4",
+    "@sanity/icons": "^3.7.4",
+    "@sanity/image-url": "^1.2.0",
+    "@sanity/vision": "^4.22.0",
     "@stripe/stripe-js": "^8.6.0",
     "@supabase/supabase-js": "^2.90.1",
     "bcrypt": "^6.0.0",
@@ -33,12 +36,15 @@
     "lucide-react": "^0.562.0",
     "next": "^16.1.1",
     "next-auth": "^4.24.13",
+    "next-sanity": "^11.6.12",
     "nextjs": "^0.0.3",
     "nodejs": "^0.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "resend": "^6.7.0",
-    "stripe": "^20.1.0"
+    "sanity": "^4.22.0",
+    "stripe": "^20.1.0",
+    "styled-components": "^6.3.8"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

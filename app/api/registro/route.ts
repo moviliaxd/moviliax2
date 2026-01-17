@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
         const nombreCompleto = apellido ? nombre + ' ' + apellido : nombre
         
         await resend.emails.send({
-          from: 'MOVILIAX <newsletter@moviliax.lat>',
+          from: '<registro@moviliax.lat>',
           to: email,
           subject: '¡Bienvenido a MOVILIAX! 🚀',
           html: '<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;"><h2>¡Hola ' + nombreCompleto + '!</h2><p>Gracias por unirte a la comunidad de MOVILIAX.</p><p>Tu cuenta ha sido creada exitosamente.</p>' + (suscritoNewsletter ? '<p>Recibirás nuestro newsletter semanal RadarX.</p>' : '') + '<p><strong>Equipo MOVILIAX</strong></p></div>'
