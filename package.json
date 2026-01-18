@@ -24,6 +24,7 @@
   "author": "HLG Innovación Digital",
   "license": "ISC",
   "dependencies": {
+    "@portabletext/react": "^6.0.2",
     "@react-email/components": "^1.0.4",
     "@sanity/client": "^7.14.0",
     "@sanity/icons": "^3.7.4",

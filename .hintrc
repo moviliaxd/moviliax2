@@ -2,8 +2,5 @@
   "extends": ["development"],
   "hints": {
     "meta-viewport": "off"
-  },
-  "ignoredUrls": [
-    ".sanity/**"
-  ]
+  }
 }

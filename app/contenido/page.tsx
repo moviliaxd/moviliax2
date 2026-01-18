@@ -1,3 +1,4 @@
+import { RichText } from '../../../components/PortableText'
 export default function ContenidoPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0f] py-20 px-6">
