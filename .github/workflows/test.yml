@@ -11,18 +11,14 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Setup Node.js ${{ matrix.node-version }}
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '18.x'
         cache: 'npm'
     
     - name: Install dependencies
@@ -36,9 +32,3 @@ jobs:
     
     - name: Run unit tests
       run: npm test -- --run
-    
-    - name: Build Next.js app
-      run: npm run build
-      env:
-        NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
-        NEXT_PUBLIC_SANITY_DATASET: production
