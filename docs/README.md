@@ -5,7 +5,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-ISC-green?style=for-the-badge)
 
-**La plataforma líder en movilidad e innovación en América Latina** - Completamente migrada de HTML estático a Next.js con CMS headless (Sanity), email funcional (Resend), analytics (Google Analytics) y base de datos (Supabase).
+**La plataforma líder en movilidad e innovación en América Latina** - Completamente migrada de HTML estático a Next.js con email funcional (Resend), analytics (Google Analytics) y base de datos (Supabase).
 
 ## 🎯 Estado del Proyecto
 
@@ -14,7 +14,6 @@
 ### Características Completadas:
 - ✅ Frontend responsivo con Tailwind CSS v4
 - ✅ Newsletter funcional (Resend + Supabase)
-- ✅ CMS headless (Sanity) con artículos dinámicos
 - ✅ Google Analytics integrado
 - ✅ API Routes para newsletter y contacto
 - ✅ Lead scoring y dashboard administrativo
@@ -32,7 +31,6 @@ Ver detalles completos: [CHECKLIST_COMPLETO.md](CHECKLIST_COMPLETO.md)
 | **TypeScript** | 5.9 | Tipado estático |
 | **Tailwind CSS** | 4.1 | Estilos utility-first |
 | **React** | 19.2 | UI library |
-| **Sanity** | CMS headless | Contenido dinámico |
 | **Supabase** | PostgreSQL | Base de datos |
 | **Resend** | Email API | Envío de emails |
 | **Google Analytics** | GA4 | Tracking |
@@ -47,9 +45,6 @@ moviliax-nextjs/
 │   │   ├── newsletter/route.ts   # ✅ Newsletter
 │   │   ├── contact/route.ts      # ✅ Contacto
 │   │   └── send-contact/route.ts # ✅ Email
-│   ├── contenido/                # ✅ CMS dinámico
-│   │   ├── page.tsx              # Listado artículos
-│   │   └── [slug]/page.tsx       # Detalle artículo
 │   ├── admin/                    # ✅ Dashboard protegido
 │   │   └── leads/page.tsx        # Gestión de leads
 │   ├── layout.tsx                # Root layout con GA
@@ -65,21 +60,12 @@ moviliax-nextjs/
 │   └── ScrollToTop.tsx           # ✅ Botón flotante
 │
 ├── lib/                          # Utilidades
-│   ├── sanity.ts                 # ✅ Cliente Sanity
-│   ├── sanityFetch.ts            # ✅ Funciones fetch
-│   ├── queries.ts                # ✅ GROQ queries
 │   ├── supabase.ts               # ✅ Cliente Supabase
 │   └── analytics.ts              # ✅ GA eventos
 │
-├── sanity/schemas/               # Schemas de ejemplo
-│   ├── article.example.ts
-│   ├── author.example.ts
-│   └── category.example.ts
-│
 ├── docs/                         # Documentación
 │   ├── ANALYTICS_SETUP.md
-│   ├── NEWSLETTER_SETUP.md
-│   └── SANITY_SETUP.md
+│   └── NEWSLETTER_SETUP.md
 │
 ├── public/                       # Assets estáticos
 ├── .github/                      # GitHub
@@ -175,23 +161,7 @@ npm run lint
 - ✅ Notificación al equipo
 - ✅ Dashboard en `/admin/leads`
 
-### 3️⃣ CMS Dinámico (Sanity)
-
-```typescript
-// Artículos se crean en Sanity Studio
-// Se renderean automáticamente en:
-// - /contenido (listado)
-// - /contenido/[slug] (detalle con SSR)
-```
-
-**Características:**
-- ✅ Relaciones: articles → authors, categories
-- ✅ PortableText para contenido rico
-- ✅ Imágenes optimizadas
-- ✅ Metadata dinámico
-- ✅ Revalidate cada 60 segundos
-
-### 4️⃣ Google Analytics
+### 3️⃣ Google Analytics
 
 ```typescript
 import { trackEvent, trackNewsletterSubscription } from '@/lib/analytics'
@@ -208,7 +178,7 @@ trackCTAClick('Suscribirse')
 - ✅ Tiempo real disponible
 - ✅ Conversiones medidas
 
-### 5️⃣ Admin Dashboard
+### 4️⃣ Admin Dashboard
 
 Acceso protegido en `/admin/leads` con:
 - 📊 Estadísticas (total, nuevos, alta prioridad)
@@ -221,11 +191,6 @@ Acceso protegido en `/admin/leads` con:
 Crear `.env.local` basado en `.env.example`:
 
 ```env
-# SANITY CMS
-NEXT_PUBLIC_SANITY_PROJECT_ID=tsyxjl86
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_TOKEN=sk_...
-
 # SUPABASE
 NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
@@ -246,7 +211,6 @@ NEXT_PUBLIC_BASE_URL=http://localhost:3000
 Ver guías completas:
 - [Google Analytics Setup](docs/ANALYTICS_SETUP.md)
 - [Newsletter Setup](docs/NEWSLETTER_SETUP.md)
-- [Sanity Setup](docs/SANITY_SETUP.md)
 
 ## 🎨 Paleta de Colores
 
@@ -290,7 +254,6 @@ vercel
 - [IMPLEMENTACION_COMPLETA.md](IMPLEMENTACION_COMPLETA.md) - Setup detallado
 - [docs/ANALYTICS_SETUP.md](docs/ANALYTICS_SETUP.md) - Google Analytics paso a paso
 - [docs/NEWSLETTER_SETUP.md](docs/NEWSLETTER_SETUP.md) - Resend + Supabase
-- [docs/SANITY_SETUP.md](docs/SANITY_SETUP.md) - Sanity CMS studio
 - [.github/copilot-instructions.md](.github/copilot-instructions.md) - Instrucciones para agentes IA
 
 ## 🤝 Contribuir
@@ -307,7 +270,6 @@ Las contribuciones son bienvenidas. Por favor:
 
 - 🌐 **Dominio Principal:** https://moviliax.lat
 - 🌐 **Dominio Secundario:** https://moviliax.online
-- 📝 **Sanity Studio:** https://sanity.io/manage
 - 📊 **Google Analytics:** https://analytics.google.com
 - 💾 **Supabase:** https://supabase.com
 - 📧 **Resend:** https://resend.com
@@ -329,7 +291,6 @@ Este proyecto está bajo la licencia ISC. Ver [LICENSE](LICENSE) para más detal
 - [Next.js](https://nextjs.org) - Framework excelente
 - [Vercel](https://vercel.com) - Deploy y hosting
 - [Tailwind CSS](https://tailwindcss.com) - Estilos utility-first
-- [Sanity](https://sanity.io) - CMS headless
 - [Supabase](https://supabase.com) - PostgreSQL en la nube
 - [Resend](https://resend.com) - Email API
 - Comunidad de Next.js y React

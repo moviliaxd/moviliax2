@@ -14,7 +14,7 @@ Este documento verifica que todas las funcionalidades esenciales del proyecto es
 - [x] Path aliases (`@/*`) configurados en tsconfig.json
 - [x] React 19.2 con App Router
 - [x] Middleware.ts para rutas protegidas (`/admin`)
-- [x] next.config.js con remotePatterns para imágenes (Sanity, moviliax.lat, moviliax.online)
+- [x] next.config.js con remotePatterns para imágenes (moviliax.lat, moviliax.online)
 - [x] .env.example actualizado con todas las variables necesarias
 - [x] globals.css con fuentes (Exo 2, Inter) y animaciones
 
@@ -372,4 +372,4 @@ Todas las funcionalidades esenciales están implementadas:
 
 **Última actualización:** 22 de diciembre, 2025
 **Versión:** 1.0.0
-**Stack:** Next.js 16 + TypeScript + Tailwind CSS v4 + Sanity CMS
+**Stack:** Next.js 16 + TypeScript + Tailwind CSS v4

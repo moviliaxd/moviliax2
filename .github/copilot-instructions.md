@@ -2,7 +2,7 @@
 
 ## 🎯 Resumen del Proyecto
 
-**MOVILIAX** es una plataforma líder de movilidad en América Latina construida con **Next.js 16** (App Router), TypeScript, Tailwind CSS, y preparada para CMS Sanity. El proyecto conecta el ecosistema de movilidad urbana, vehículos eléctricos, y ciudades inteligentes en LATAM.
+**MOVILIAX** es una plataforma líder de movilidad en América Latina construida con **Next.js 16** (App Router), TypeScript y Tailwind CSS. El proyecto conecta el ecosistema de movilidad urbana, vehículos eléctricos, y ciudades inteligentes en LATAM.
 
 **Stack Actual:**
 - **Next.js 16.1** (App Router) + TypeScript 5.9 (strict mode)
@@ -13,7 +13,6 @@
 - **Google Analytics 4** (GA_ID env var, con tracking automático)
 - **Next-Auth 4.24** (configurado con NEXTAUTH_SECRET, sin rutas protegidas aún activas)
 - **Stripe** (integración pagos, rutas creadas)
-- **Sanity CMS** (configurado, esquemas de ejemplo en `sanity/schemas/`)
 
 **Estado Operacional (2026):** ✅ 100% completo
 - Newsletter: subscripción → Supabase + email Resend ✅
@@ -60,9 +59,6 @@ app/
 │   ├── auth/[...nextauth]/      # NextAuth endpoints
 │   ├── checkout/route.ts        # Stripe checkout (futura)
 │   └── [otros]/                 # Rutas de API diversas
-├── contenido/              # Sección de artículos (EN DESARROLLO)
-│   ├── page.tsx            # Lista de artículos (placeholder)
-│   └── [slug]/             # Detalle artículo (cuando Sanity esté activo)
 ├── dashboard/              # Panel usuario (protegido)
 ├── admin/                  # Panel admin (protegido)
 │   └── leads/[id]/route.ts # Gestión de leads
@@ -83,13 +79,7 @@ lib/
 ├── supabase.ts             # Cliente Supabase con service role
 ├── supabaseadmin.ts        # Admin Supabase (alias)
 ├── supabaseclient.ts       # Cliente Supabase (si aplica)
-├── authOptions.ts          # Configuración NextAuth
-└── [queries.ts]            # GROQ queries (cuando Sanity esté activo)
-
-sanity/schemas/             # Esquemas de ejemplo (OPCIONAL - para futura implementación)
-├── article.example.ts
-├── author.example.ts
-└── category.example.ts
+└── authOptions.ts          # Configuración NextAuth
 
 public/
 ├── robots.txt              # SEO
@@ -157,11 +147,6 @@ NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 NEXTAUTH_SECRET=tu_secret_aqui
 NEXTAUTH_URL=http://localhost:3000 (dev) / https://moviliax.lat (prod)
 
-# Sanity (cuando esté activo)
-NEXT_PUBLIC_SANITY_PROJECT_ID=tsyxjl86
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_API_TOKEN=sk_... (opcional, si necesitas escribir desde Next.js)
-
 # Admin/Stripe
 ADMIN_TOKEN=tu_token_secreto (si existe middleware.ts)
 STRIPE_PUBLIC_KEY=pk_...
@@ -198,8 +183,6 @@ STRIPE_SECRET_KEY=sk_...
   - Context API y providers
   - **Ejemplo**: `Header.tsx` (menú móvil), `NewsletterForm.tsx` (form submit)
   
-- **NUNCA**: Importar Sanity client o hacer queries en 'use client'
-  - Alternativa: Pasar datos como props desde server component padre
 
 ### 2. **API Routes Pattern (ESTRICTO)**
 ```typescript
@@ -368,7 +351,6 @@ npm run dev 2>&1 | grep "NEXT_PUBLIC\|SUPABASE\|RESEND"
 | **Supabase** | Newsletter + Leads DB | ✅ Activo | URL, Service Role Key |
 | **Resend** | Email delivery | ✅ Activo | API Key, dominio verificado |
 | **Google Analytics** | Tracking eventos | ✅ Activo | GA_ID env var |
-| **Sanity CMS** | Contenido dinámico | ⏳ EN DESARROLLO | Project ID, API token |
 | **Next-Auth** | Autenticación | ⏳ CONFIGURADO | NEXTAUTH_SECRET |
 | **Stripe** | Pagos | ⏳ FUTURO | Keys en env |
 
@@ -395,7 +377,6 @@ npm run dev 2>&1 | grep "NEXT_PUBLIC\|SUPABASE\|RESEND"
 
 - **ANALYTICS_SETUP.md** - Google Analytics 4 configuración
 - **NEWSLETTER_SETUP.md** - Resend + Supabase configuración  
-- **SANITY_SETUP.md** - Sanity CMS setup (cuando se active)
 - **AUDITORIA_COMPLETADA.md** - Auditoría de seguridad y mejoras
 - **RESUMEN_FINAL.md** - Estado actual del proyecto
 
@@ -429,11 +410,4 @@ npm run dev 2>&1 | grep "NEXT_PUBLIC\|SUPABASE\|RESEND"
 2. Tailwind fonts → editar `tailwind.config.js` extend.fontFamily
 3. CSS global → editar `app/globals.css`
 4. NO crear CSS modules (usar Tailwind classes)
-
-### ✅ Conectar a Sanity (Futuro)
-1. Crear/copiar schemas de `sanity/schemas/*.example.ts` a Sanity Studio
-2. Escribir GROQ queries en `lib/queries.ts`
-3. Crear server component con `sanityFetch(query)` 
-4. Pasar datos a client components como props
-5. Agregar ruta dinámica en `app/contenido/[slug]/page.tsx`
 

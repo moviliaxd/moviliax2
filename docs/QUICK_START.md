@@ -108,9 +108,6 @@ mkdir -p app/colaboradores
 
 ### FASE 4: Integrar CMS (2-3 días)
 ```bash
-# Opción Sanity (recomendada)
-npm install @sanity/client @sanity/image-url
-
 # Opción Contentful
 npm install contentful
 ```
