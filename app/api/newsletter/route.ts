@@ -1,10 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
-import Stripe from 'stripe';
+import { validators } from '@/lib/validators';
+import { checkRateLimit, getClientIP, rateLimitConfigs } from '@/lib/rateLimit';
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    const clientIP = getClientIP(request);
+    const rateLimit = checkRateLimit(`newsletter:${clientIP}`, rateLimitConfigs.newsletter);
+
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: 'Demasiadas solicitudes. Intenta de nuevo en unos minutos.' },
+        { status: 429 }
+      );
+    }
+
     // Verificar que las variables de entorno existan
     if (!process.env.RESEND_API_KEY) {
       console.error('RESEND_API_KEY no está configurado');
@@ -22,7 +34,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Importar dinámicamente para evitar errores en build
     const resend = new Resend(process.env.RESEND_API_KEY);
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -31,8 +42,8 @@ export async function POST(request: NextRequest) {
 
     const { email } = await request.json();
 
-    // Validar email
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    // Validar email usando validador centralizado
+    if (!email || !validators.email(email)) {
       return NextResponse.json(
         { error: 'Email inválido' },
         { status: 400 }

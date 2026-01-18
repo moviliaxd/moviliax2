@@ -35,7 +35,14 @@ export async function POST(request: NextRequest) {
   })
 
   const body = await request.text()
-  const signature = request.headers.get('stripe-signature')!
+  const signature = request.headers.get('stripe-signature')
+
+  if (!signature) {
+    return NextResponse.json(
+      { error: 'Missing stripe-signature header' },
+      { status: 400 }
+    )
+  }
 
   let event: Stripe.Event
 
@@ -45,8 +52,9 @@ export async function POST(request: NextRequest) {
       signature,
       STRIPE_WEBHOOK_SECRET
     )
-  } catch (err: any) {
-    console.error('Webhook signature verification failed:', err.message)
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+    console.error('Webhook signature verification failed:', errorMessage)
     return NextResponse.json(
       { error: 'Webhook signature verification failed' },
       { status: 400 }
@@ -58,18 +66,24 @@ export async function POST(request: NextRequest) {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session
-        
+
         // Actualizar member en Supabase
         const memberId = session.metadata?.member_id
-        const customerId = session.customer as string
-        const subscriptionId = session.subscription as string
 
-        if (memberId) {
+        // Extraer IDs de forma segura
+        const customerId = typeof session.customer === 'string'
+          ? session.customer
+          : session.customer?.id
+        const subscriptionId = typeof session.subscription === 'string'
+          ? session.subscription
+          : session.subscription?.id
+
+        if (memberId && customerId) {
           await supabase
             .from('connect_members')
             .update({
               stripe_customer_id: customerId,
-              stripe_subscription_id: subscriptionId,
+              stripe_subscription_id: subscriptionId || null,
               status: 'active',
               plan: session.metadata?.plan || 'pro',
             })

@@ -49,7 +49,7 @@ export default function RegisterForm() {
     }
 
     try {
-      const res = await fetch('/api/registro', {
+      const res = await fetch('/api/auth/registro', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

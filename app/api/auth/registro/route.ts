@@ -2,12 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import bcrypt from 'bcrypt';
+import { validators, escapeHtml } from '@/lib/validators';
+import { checkRateLimit, getClientIP, rateLimitConfigs } from '@/lib/rateLimit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    const clientIP = getClientIP(request);
+    const rateLimit = checkRateLimit(`auth:${clientIP}`, rateLimitConfigs.auth);
+
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: 'Demasiados intentos. Intenta de nuevo en unos minutos.' },
+        { status: 429 }
+      );
+    }
+
     // 1. Verificar variables de entorno
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
       console.error('Credenciales de Supabase no configuradas');
@@ -21,7 +34,7 @@ export async function POST(request: NextRequest) {
       console.error('RESEND_API_KEY no está configurado');
     }
 
-    // 2. Crear cliente Supabase (igual que newsletter)
+    // 2. Crear cliente Supabase
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -38,18 +51,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 5. Validar email
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    // 5. Validar email usando validador centralizado
+    if (!validators.email(email)) {
       return NextResponse.json(
         { error: 'Email inválido' },
         { status: 400 }
       );
     }
 
-    // 6. Validar contraseña
-    if (password.length < 8) {
+    // 6. Validar contraseña con validador centralizado
+    const passwordValidation = validators.password(password);
+    if (!passwordValidation.valid) {
       return NextResponse.json(
-        { error: 'La contraseña debe tener al menos 8 caracteres' },
+        { error: passwordValidation.errors.join(', ') },
         { status: 400 }
       );
     }
@@ -90,7 +104,7 @@ export async function POST(request: NextRequest) {
     if (dbError) {
       console.error('Database error:', dbError);
       return NextResponse.json(
-        { error: 'Error al guardar usuario: ' + dbError.message },
+        { error: 'Error al procesar el registro' },
         { status: 500 }
       );
     }
@@ -102,9 +116,9 @@ export async function POST(request: NextRequest) {
         await resend.emails.send({
           from: 'MOVILIAX <newsletter@moviliax.lat>',
           to: email,
-          subject: '¡Bienvenido a MOVILIAX! 🚀',
+          subject: 'Bienvenido a MOVILIAX',
           html: `
-            <h2>¡Hola ${name}!</h2>
+            <h2>Hola ${escapeHtml(name)}!</h2>
             <p>Gracias por registrarte en MOVILIAX.</p>
             <p>Tu cuenta ha sido creada exitosamente.</p>
             <p><strong>Equipo MOVILIAX</strong></p>
@@ -112,7 +126,6 @@ export async function POST(request: NextRequest) {
         });
       } catch (emailError) {
         console.error('Email error:', emailError);
-        // No fallar si el email no se envía
       }
     }
 
