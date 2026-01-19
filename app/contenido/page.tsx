@@ -20,8 +20,8 @@ const articlesQuery = `
 export const revalidate = 60 // Revalidar cada 60 segundos
 
 export const metadata = {
-  title: 'Blog - MOVILIAX',
-  description: 'Artículos sobre desarrollo web, tecnología y transformación digital',
+  title: 'Artículos - MOVILIAX',
+  description: 'Artículos sobre movilidad y logística en Latinoámerica'
 }
 
 interface Article {
