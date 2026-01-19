@@ -20,7 +20,7 @@ const articlesQuery = `
 export const revalidate = 60 // Revalidar cada 60 segundos
 
 export const metadata = {
-  title: 'Artículos - MOVILIAX',
+  title: 'MOVILIAX - contenido',
   description: 'Artículos sobre movilidad y logística en Latinoámerica'
 }
 
@@ -59,10 +59,10 @@ export default async function ContenidoPage() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-[#00E0FF] to-[#6B46FF] bg-clip-text text-transparent">
-            Blog de MOVILIAX
+            MOVILIAX - contenido
           </h1>
           <p className="text-[#9CA3AF] text-xl">
-            Artículos sobre tecnología, desarrollo y transformación digital
+            Artículos sobre movilidad y logistíca en Latinoámerica
           </p>
         </div>
 

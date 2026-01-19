@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: article.seo?.metaTitle || `${article.title} - MOVILIAX Blog`,
+    title: article.seo?.metaTitle || `${article.title} - MOVILIAXontenido`,
     description: article.seo?.metaDescription || article.excerpt || '',
     keywords: article.seo?.keywords || [],
     openGraph: {
